@@ -43,7 +43,7 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
   } else if (error) {
     content = <ErrorModal isOpen={fetchingProductError} handleOnClose={() => setFetchingProductError(false)} info="Nie udało się pobrać listy produktów" />;
   } else {
-    const { productsDetails: { quantity, products } } = data!;
+    const { productsDetails: { totalCount, products } } = data!;
 
     content = (
       <>
@@ -62,7 +62,7 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
         <Pagination
           activePage={activePage}
           onChange={handlePaginationOnChange}
-          itemsQuantity={quantity}
+          itemsQuantity={totalCount}
           quantityPerPage={quantityPerPage}
         />
       </>
