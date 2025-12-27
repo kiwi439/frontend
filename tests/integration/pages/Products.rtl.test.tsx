@@ -21,7 +21,7 @@ describe('Products', () => {
         result: {
           data: {
             productsDetails: {
-              quantity: 1,
+              totalCount: 1,
               products: [
                 {
                   id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
@@ -55,7 +55,7 @@ describe('Products', () => {
         result: {
           data: {
             productsDetails: {
-              quantity: 2,
+              totalCount: 2,
               products: [
                 {
                   id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
@@ -63,7 +63,8 @@ describe('Products', () => {
                   price: 55.0,
                   availableQuantity: 125,
                   pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
@@ -71,7 +72,8 @@ describe('Products', () => {
                   price: 80.99,
                   availableQuantity: 10,
                   pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 }
               ]
             }
@@ -113,7 +115,7 @@ describe('Products', () => {
         result: {
           data: {
             productsDetails: {
-              quantity: 26,
+              totalCount: 26,
               products: [
                 {
                   id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
@@ -121,7 +123,8 @@ describe('Products', () => {
                   price: 55.0,
                   availableQuantity: 125,
                   pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
@@ -129,7 +132,8 @@ describe('Products', () => {
                   price: 80.99,
                   availableQuantity: 10,
                   pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: 'd15ef210-a015-4e70-995e-d42d04d11abf',
@@ -137,7 +141,8 @@ describe('Products', () => {
                   price: 100.0,
                   availableQuantity: 30,
                   pictureKey: 'images/products/roof_ accessories/swietlik_fakro.png',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: '49780aaf-e59d-408a-af4a-8b3ce1a1c186',
@@ -145,7 +150,8 @@ describe('Products', () => {
                   price: 110.99,
                   availableQuantity: 10,
                   pictureKey: 'images/products/constuction_chemicals/tynk_mozaikowy.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: '9e5fda1d-fd25-44d2-a724-c1de6b37f673',
@@ -153,7 +159,8 @@ describe('Products', () => {
                   price: 120.99,
                   availableQuantity: 10,
                   pictureKey: 'images/products/constuction_chemicals/tynk akrylowy.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 }
               ]
             }
@@ -182,7 +189,7 @@ describe('Products', () => {
         result: {
           data: {
             productsDetails: {
-              quantity: 6,
+              totalCount: 6,
               products: [
                 {
                   id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
@@ -190,7 +197,8 @@ describe('Products', () => {
                   price: 55.0,
                   availableQuantity: 125,
                   pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
@@ -198,7 +206,8 @@ describe('Products', () => {
                   price: 80.99,
                   availableQuantity: 10,
                   pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: 'd15ef210-a015-4e70-995e-d42d04d11abf',
@@ -206,7 +215,8 @@ describe('Products', () => {
                   price: 100.0,
                   availableQuantity: 30,
                   pictureKey: 'images/products/roof_ accessories/swietlik_fakro.png',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: '49780aaf-e59d-408a-af4a-8b3ce1a1c186',
@@ -214,7 +224,8 @@ describe('Products', () => {
                   price: 110.99,
                   availableQuantity: 10,
                   pictureKey: 'images/products/constuction_chemicals/tynk_mozaikowy.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 },
                 {
                   id: '9e5fda1d-fd25-44d2-a724-c1de6b37f673',
@@ -222,7 +233,8 @@ describe('Products', () => {
                   price: 120.99,
                   availableQuantity: 10,
                   pictureKey: 'images/products/constuction_chemicals/tynk akrylowy.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 }
               ]
             }
@@ -237,7 +249,7 @@ describe('Products', () => {
         result: {
           data: {
             productsDetails: {
-              quantity: 6,
+              totalCount: 6,
               products: [
                 {
                   id: '9e5fda1d-fd25-44d2-a724-c1de6b3hh573',
@@ -245,7 +257,8 @@ describe('Products', () => {
                   price: 19.99,
                   availableQuantity: 400,
                   pictureKey: 'images/products/constuction_chemicals/gips_szpachlowy.jpeg',
-                  pictureBucket: 'budoman-development'
+                  pictureBucket: 'budoman-development',
+                  __typename: 'ProductObject'
                 }
               ]
             }
