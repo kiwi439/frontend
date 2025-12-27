@@ -30,7 +30,7 @@ const Opinions = () => {
   if (loading) return <LoadingModal isOpen={loading} info="Trwa pobieranie opini!" />;
   if (error) return <h1>error</h1>;
 
-  const { opinionsDetails: { allOpinionsQuantity, opinions } } = data!;
+  const { opinionsDetails: { totalCount, opinions } } = data!;
 
   return (
     <div className={`main__${blockName} ${blockName}`}>
@@ -42,7 +42,7 @@ const Opinions = () => {
       <Pagination
         activePage={activePage}
         onChange={handlePaginationOnChange}
-        itemsQuantity={allOpinionsQuantity}
+        itemsQuantity={totalCount}
         quantityPerPage={quantityPerPage}
       />
       {
