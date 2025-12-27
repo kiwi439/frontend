@@ -11,7 +11,7 @@ type Orders = Array<Order>;
 
 export type GetOrdersResponse = DeepReadonly<{
   orders: {
-    allOrdersQuantity: number,
+    totalCount: number,
     orders: Orders,
     __typename: string
   }
