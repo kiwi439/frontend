@@ -87,7 +87,7 @@ const History = () => {
             <Pagination
               activePage={activePage}
               onChange={handlePaginationOnChange}
-              itemsQuantity={data.orders.allOrdersQuantity}
+              itemsQuantity={data.orders.totalCount}
               quantityPerPage={quantityPerPage}
             />
           </Fragment>

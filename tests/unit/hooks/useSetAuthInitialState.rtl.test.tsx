@@ -17,7 +17,7 @@ describe('useSetAuthInitialState', () => {
 
   it('saves user id to store when user is present in API response', async () => {
     useQuery.mockImplementation((_query, { onCompleted }) => {
-      const result = { auth: { userId: '82e785e4-93d5-42f4-aea1-8196b26a4f49' } };
+      const result = { auth: { id: '82e785e4-93d5-42f4-aea1-8196b26a4f49' } };
       onCompleted?.(result);
 
       return { loading: false, error: undefined, data: result };

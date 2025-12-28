@@ -15,7 +15,7 @@ export type Opinions = Array<Opinion>;
 
 export type GetOpinionsResponse = {
   opinionsDetails: {
-    allOpinionsQuantity: number,
+    totalCount: number,
     opinions: Array<Opinion>,
     __typename: string
   }

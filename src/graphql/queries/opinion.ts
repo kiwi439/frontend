@@ -16,7 +16,7 @@ export const GET_OPINIONS = gql`
           }
         }
       }
-      allOpinionsQuantity
+      totalCount
     }
   }
 `;
