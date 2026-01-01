@@ -16,23 +16,30 @@ describe('Products', () => {
       {
         request: {
           query: GET_PRODUCTS,
-          variables: { input: { promoted: false, type: null, pagination: { page: 0, quantityPerPage: 5 } } }
+          variables: { first: 5, after: null, promoted: false, type: null }
         },
         result: {
           data: {
-            productsDetails: {
+            products: {
               totalCount: 1,
-              products: [
+              edges: [
                 {
-                  id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
-                  name: 'Taśma kalenicowa',
-                  price: 55.0,
-                  availableQuantity: 125,
-                  pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'MQ',
+                  node: {
+                    id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
+                    name: 'Taśma kalenicowa',
+                    price: 55.0,
+                    availableQuantity: 125,
+                    pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 }
-              ]
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'MQ'
+              }
             }
           }
         },
@@ -50,32 +57,42 @@ describe('Products', () => {
       {
         request: {
           query: GET_PRODUCTS,
-          variables: { input: { promoted: false, type: null, pagination: { page: 0, quantityPerPage: 5 } } }
+          variables: { first: 5, after: null, promoted: false, type: null }
         },
         result: {
           data: {
-            productsDetails: {
+            products: {
               totalCount: 2,
-              products: [
+              edges: [
                 {
-                  id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
-                  name: 'Taśma kalenicowa',
-                  price: 55.0,
-                  availableQuantity: 125,
-                  pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'MQ',
+                  node: {
+                    id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
+                    name: 'Taśma kalenicowa',
+                    price: 55.0,
+                    availableQuantity: 125,
+                    pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
-                  name: 'Tynk nanosilikonowy',
-                  price: 80.99,
-                  availableQuantity: 10,
-                  pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'Mg',
+                  node: {
+                    id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
+                    name: 'Tynk nanosilikonowy',
+                    price: 80.99,
+                    availableQuantity: 10,
+                    pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 }
-              ]
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'Mg'
+              }
             }
           }
         }
@@ -92,9 +109,7 @@ describe('Products', () => {
       {
         request: {
           query: GET_PRODUCTS,
-          variables: {
-            input: { promoted: false, type: null, pagination: { page: 0, quantityPerPage: 5 } }
-          }
+          variables: { first: 5, after: null, promoted: false, type: null }
         },
         error: new Error('Something went wrong!')
       }
@@ -110,59 +125,78 @@ describe('Products', () => {
       {
         request: {
           query: GET_PRODUCTS,
-          variables: { input: { promoted: false, type: null, pagination: { page: 0, quantityPerPage: 5 } } }
+          variables: { first: 5, after: null, promoted: false, type: null }
         },
         result: {
           data: {
-            productsDetails: {
+            products: {
               totalCount: 26,
-              products: [
+              edges: [
                 {
-                  id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
-                  name: 'Taśma kalenicowa',
-                  price: 55.0,
-                  availableQuantity: 125,
-                  pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'MQ',
+                  node: {
+                    id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
+                    name: 'Taśma kalenicowa',
+                    price: 55.0,
+                    availableQuantity: 125,
+                    pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
-                  name: 'Tynk nanosilikonowy',
-                  price: 80.99,
-                  availableQuantity: 10,
-                  pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'Mg',
+                  node: {
+                    id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
+                    name: 'Tynk nanosilikonowy',
+                    price: 80.99,
+                    availableQuantity: 10,
+                    pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: 'd15ef210-a015-4e70-995e-d42d04d11abf',
-                  name: 'Świetlik',
-                  price: 100.0,
-                  availableQuantity: 30,
-                  pictureKey: 'images/products/roof_ accessories/swietlik_fakro.png',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'Mw',
+                  node: {
+                    id: 'd15ef210-a015-4e70-995e-d42d04d11abf',
+                    name: 'Świetlik',
+                    price: 100.0,
+                    availableQuantity: 30,
+                    pictureKey: 'images/products/roof_ accessories/swietlik_fakro.png',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: '49780aaf-e59d-408a-af4a-8b3ce1a1c186',
-                  name: 'Tynk mozaikowy',
-                  price: 110.99,
-                  availableQuantity: 10,
-                  pictureKey: 'images/products/constuction_chemicals/tynk_mozaikowy.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'NA',
+                  node: {
+                    id: '49780aaf-e59d-408a-af4a-8b3ce1a1c186',
+                    name: 'Tynk mozaikowy',
+                    price: 110.99,
+                    availableQuantity: 10,
+                    pictureKey: 'images/products/constuction_chemicals/tynk_mozaikowy.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: '9e5fda1d-fd25-44d2-a724-c1de6b37f673',
-                  name: 'Tynk akrylowy',
-                  price: 120.99,
-                  availableQuantity: 10,
-                  pictureKey: 'images/products/constuction_chemicals/tynk akrylowy.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'NQ',
+                  node: {
+                    id: '9e5fda1d-fd25-44d2-a724-c1de6b37f673',
+                    name: 'Tynk akrylowy',
+                    price: 120.99,
+                    availableQuantity: 10,
+                    pictureKey: 'images/products/constuction_chemicals/tynk akrylowy.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 }
-              ]
+              ],
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: 'NQ'
+              }
             }
           }
         }
@@ -184,59 +218,78 @@ describe('Products', () => {
       {
         request: {
           query: GET_PRODUCTS,
-          variables: { input: { promoted: false, type: null, pagination: { page: 0, quantityPerPage: 5 } } }
+          variables: { first: 5, after: null, promoted: false, type: null }
         },
         result: {
           data: {
-            productsDetails: {
+            products: {
               totalCount: 6,
-              products: [
+              edges: [
                 {
-                  id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
-                  name: 'Taśma kalenicowa',
-                  price: 55.0,
-                  availableQuantity: 125,
-                  pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'MQ',
+                  node: {
+                    id: 'f3044ca4-fe1b-435b-a6cb-628ff5d4e341',
+                    name: 'Taśma kalenicowa',
+                    price: 55.0,
+                    availableQuantity: 125,
+                    pictureKey: 'images/products/roof_ accessories/tasma_kalenicowa.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
-                  name: 'Tynk nanosilikonowy',
-                  price: 80.99,
-                  availableQuantity: 10,
-                  pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'Mg',
+                  node: {
+                    id: '99ae8243-3b70-4dc0-90ee-b5453a2f052d',
+                    name: 'Tynk nanosilikonowy',
+                    price: 80.99,
+                    availableQuantity: 10,
+                    pictureKey: 'images/products/constuction_chemicals/tynk_nanosilikonowy.png',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: 'd15ef210-a015-4e70-995e-d42d04d11abf',
-                  name: 'Świetlik',
-                  price: 100.0,
-                  availableQuantity: 30,
-                  pictureKey: 'images/products/roof_ accessories/swietlik_fakro.png',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'Mw',
+                  node: {
+                    id: 'd15ef210-a015-4e70-995e-d42d04d11abf',
+                    name: 'Świetlik',
+                    price: 100.0,
+                    availableQuantity: 30,
+                    pictureKey: 'images/products/roof_ accessories/swietlik_fakro.png',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: '49780aaf-e59d-408a-af4a-8b3ce1a1c186',
-                  name: 'Tynk mozaikowy',
-                  price: 110.99,
-                  availableQuantity: 10,
-                  pictureKey: 'images/products/constuction_chemicals/tynk_mozaikowy.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'NA',
+                  node: {
+                    id: '49780aaf-e59d-408a-af4a-8b3ce1a1c186',
+                    name: 'Tynk mozaikowy',
+                    price: 110.99,
+                    availableQuantity: 10,
+                    pictureKey: 'images/products/constuction_chemicals/tynk_mozaikowy.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 },
                 {
-                  id: '9e5fda1d-fd25-44d2-a724-c1de6b37f673',
-                  name: 'Tynk akrylowy',
-                  price: 120.99,
-                  availableQuantity: 10,
-                  pictureKey: 'images/products/constuction_chemicals/tynk akrylowy.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'NQ',
+                  node: {
+                    id: '9e5fda1d-fd25-44d2-a724-c1de6b37f673',
+                    name: 'Tynk akrylowy',
+                    price: 120.99,
+                    availableQuantity: 10,
+                    pictureKey: 'images/products/constuction_chemicals/tynk akrylowy.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 }
-              ]
+              ],
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: 'NQ'
+              }
             }
           }
         }
@@ -244,23 +297,30 @@ describe('Products', () => {
       {
         request: {
           query: GET_PRODUCTS,
-          variables: { input: { promoted: false, type: null, pagination: { page: 1, quantityPerPage: 5 } } }
+          variables: { first: 5, after: 'NQ', promoted: false, type: null }
         },
         result: {
           data: {
-            productsDetails: {
+            products: {
               totalCount: 6,
-              products: [
+              edges: [
                 {
-                  id: '9e5fda1d-fd25-44d2-a724-c1de6b3hh573',
-                  name: 'Gips szpachlowy',
-                  price: 19.99,
-                  availableQuantity: 400,
-                  pictureKey: 'images/products/constuction_chemicals/gips_szpachlowy.jpeg',
-                  pictureBucket: 'budoman-development',
-                  __typename: 'ProductObject'
+                  cursor: 'Ng',
+                  node: {
+                    id: '9e5fda1d-fd25-44d2-a724-c1de6b3hh573',
+                    name: 'Gips szpachlowy',
+                    price: 19.99,
+                    availableQuantity: 400,
+                    pictureKey: 'images/products/constuction_chemicals/gips_szpachlowy.jpeg',
+                    pictureBucket: 'budoman-development',
+                    __typename: 'ProductObject'
+                  }
                 }
-              ]
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'Ng'
+              }
             }
           }
         }

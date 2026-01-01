@@ -22,9 +22,16 @@ export type ProductInBasket = Omit<Product, 'quantity'> & { quantity: number }
 export type ProductsInBasket = Array<ProductInBasket>;
 
 export type GetProductsResponse = DeepReadonly<{
-  productsDetails: {
-    products: Array<Product['attributes']>,
-    quantity: number,
+  products: {
+    totalCount: number
+    edges: Array<{
+      cursor: string
+      node: Product['attributes']
+    }>
+    pageInfo: {
+      hasNextPage: boolean
+      endCursor: string | null
+    }
     __typename: string
   }
 }>;
