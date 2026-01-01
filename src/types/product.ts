@@ -21,7 +21,8 @@ export type Products = Array<Product>;
 export type ProductInBasket = Omit<Product, 'quantity'> & { quantity: number }
 export type ProductsInBasket = Array<ProductInBasket>;
 
-export type GetProductsResponse = DeepReadonly<{
+// TODO: Usunąć DeepReadonly - powoduje problemy z inferencją typów
+export type GetProductsResponse = {
   products: {
     totalCount: number
     edges: Array<{
@@ -34,4 +35,4 @@ export type GetProductsResponse = DeepReadonly<{
     }
     __typename: string
   }
-}>;
+}
