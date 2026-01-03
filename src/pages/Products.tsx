@@ -26,18 +26,17 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
   const [fetchProducts, { loading, error, data, called }] = useLazyQuery<GetProductsResponse>(GET_PRODUCTS);
 
   const handlePaginationOnChange = async (pageNumber: number) => {
-    const newPageIndex = pageNumber - 1;
+    const selectedPageIndex = pageNumber - 1;
+    const isSkippingPages = selectedPageIndex > activePage + 1;
+    const needsLoadIndirectPages = !cursors.has(selectedPageIndex);
     
-    const isSkippingPages = newPageIndex > activePage + 1;
-    const needsIntermediatePages = !cursors.has(newPageIndex);
+    let currentCursor = cursors.get(selectedPageIndex) || null;
     
-    let currentCursor = cursors.get(newPageIndex) || null;
-    
-    if (isSkippingPages && needsIntermediatePages) {
+    if (isSkippingPages && needsLoadIndirectPages) {
       currentCursor = cursors.get(activePage + 1) ?? null;
       let currentPage = activePage + 1;
       
-      while (currentPage < newPageIndex && currentCursor) {
+      while (currentPage < selectedPageIndex && currentCursor) {
         const pageToSave = currentPage + 1;
         const result = await fetchProducts({
           variables: {
@@ -46,10 +45,10 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
             promoted: arePromoted,
             type: productType
           },
-          onCompleted: (data) => {
+          onCompleted: (data: GetProductsResponse) => {
             setCursors(prev => {
               const newCursors = new Map(prev);
-              newCursors.set(pageToSave, data.products.pageInfo.endCursor!);
+              newCursors.set(pageToSave, data.products.pageInfo.endCursor);
               return newCursors;
             });
           },
@@ -57,23 +56,17 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
         });
         
         currentPage++;
-        currentCursor = result.data!.products.pageInfo.endCursor!;
+        currentCursor = result.data!.products.pageInfo.endCursor;
       }
     }
     
-    setActivePage(newPageIndex);
-    
-    fetchProducts({
-      variables: {
-        first: QUANTITY_PER_PAGE,
-        after: currentCursor,
-        promoted: arePromoted,
-        type: productType
-      },
-      onCompleted: (data) => {
+    setActivePage(selectedPageIndex);
+
+    fetchProducts({ variables: { first: QUANTITY_PER_PAGE, after: currentCursor, promoted: arePromoted, type: productType },
+      onCompleted: (data: GetProductsResponse) => {
         setCursors(prev => {
           const newCursors = new Map(prev);
-          newCursors.set(newPageIndex + 1, data.products.pageInfo.endCursor!);
+          newCursors.set(selectedPageIndex + 1, data.products.pageInfo.endCursor);
           return newCursors;
         });
       },
@@ -120,13 +113,15 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
 
   useScrollIntoElement({ scrollDependency: location.key, elementSelector: `.${BLOCK_NAME}__header` });
 
-  // Czy nie musze tu resetować cursors? Jednak ten kod się wykonuje przy zmianie filtrów rowniez
   useEffect(() => {
+    setActivePage(0);
+    setCursors(new Map([[0, null]]));
+    
     fetchProducts({ variables: { first: QUANTITY_PER_PAGE, after: null, promoted: arePromoted, type: productType },
-      onCompleted: (data) => {
+      onCompleted: (data: GetProductsResponse) => {
         setCursors(prev => {
           const newCursors = new Map(prev);
-          newCursors.set(activePage + 1, data.products.pageInfo.endCursor!);
+          newCursors.set(1, data.products.pageInfo.endCursor);
           return newCursors;
         });
       },
