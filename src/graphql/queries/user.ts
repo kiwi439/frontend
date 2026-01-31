@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const IS_USER_LOGGED = gql`
   query IsUserLogged {
-    auth: isUserLogged {
+    auth: currentUser {
       id
     }
   }
