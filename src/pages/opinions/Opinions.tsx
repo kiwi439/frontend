@@ -39,8 +39,9 @@ const Opinions = () => {
   const processFetchingOpinions = async () => {
     let after: string | undefined;
     const newCursors = [...cursors];
+    const startPage = activePage < cursors.length ? activePage : cursors.length;
 
-    for (let page = cursors.length; page <= activePage; page++) {
+    for (let page = startPage; page <= activePage; page++) {
       after = page === 0 ? undefined : (newCursors[page - 1] ?? undefined);
       const result = await fetchOpinions({ variables: { first: quantityPerPage, after } });
 
