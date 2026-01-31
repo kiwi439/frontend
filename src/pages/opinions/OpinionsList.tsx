@@ -1,5 +1,4 @@
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Opinions } from 'types/opinion';
 import Opinion from './Opinion';
 
@@ -10,7 +9,7 @@ const OpinionsList = ({ opinions }: OpinionsListProps) => {
 
   return (
     <div className={`${blockName}__opinion-list-wrapper`}>
-      { opinions.map((opinion, index) => <Opinion opinionsData={opinion} index={index} key={uuidv4()} />) }
+      { opinions.map((opinion, index) => <Opinion opinion={opinion} index={index} key={opinion.id} />) }
     </div>
   );
 };

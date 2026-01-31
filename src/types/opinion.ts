@@ -1,6 +1,7 @@
 import { Avatars } from 'types/avatar';
 
 export type Opinion = {
+  id: string,
   content: string,
   mark: number,
   updatedAt: string,
@@ -14,9 +15,16 @@ export type Opinion = {
 export type Opinions = Array<Opinion>;
 
 export type GetOpinionsResponse = {
-  opinionsDetails: {
-    totalCount: number,
-    opinions: Array<Opinion>,
+  opinions: {
+    totalCount: number
+    edges: Array<{
+      cursor: string
+      node: Opinion
+    }>
+    pageInfo: {
+      hasNextPage: boolean
+      endCursor: string | null
+    }
     __typename: string
   }
 }
