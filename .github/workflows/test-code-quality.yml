@@ -42,7 +42,6 @@ jobs:
     needs: core-validation
     uses: michal-siwiec/system-tests/.github/workflows/shop_e2e_tests.yml@develop
     with:
-      budoman-backend_branch: feature/fixes
       budoman-frontend_branch: ${{ github.ref_name }}
     secrets:
       BUDOMAN_FRONTEND_AWS_ACCESS_KEY_ID: ${{ secrets.BUDOMAN_FRONTEND_AWS_ACCESS_KEY_ID }}
