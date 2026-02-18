@@ -26,24 +26,16 @@ const Opinions = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [fetchOpinions] = useLazyQuery<GetOpinionsResponse>(GET_OPINIONS);
-  const [fetchOpinionRefreshKey, setFetchOpinionRefreshKey] = useState(0);
 
   const handlePaginationOnChange = (pageNumber: number) => setActivePage(pageNumber - 1);
 
-  const refetch = () => {
-    setCursors([]);
-    setActivePage(0);
-    setFetchOpinionRefreshKey((k) => k + 1);
-  };
+  const processFetchingOpinions = async ({ targetPage, currentCursors }: { targetPage: number; currentCursors: (string | null)[] }) => {
+    const newCursors = [...currentCursors];
+    const startPage = Math.min(targetPage, currentCursors.length);
 
-  const processFetchingOpinions = async () => {
-    let after: string | undefined;
-    const newCursors = [...cursors];
-    const startPage = activePage < cursors.length ? activePage : cursors.length;
-
-    for (let page = startPage; page <= activePage; page++) {
-      after = page === 0 ? undefined : (newCursors[page - 1] ?? undefined);
-      const result = await fetchOpinions({ variables: { first: quantityPerPage, after } });
+    for (let page = startPage; page <= targetPage; page++) {
+      const after = page === 0 ? undefined : (newCursors[page - 1] ?? undefined);
+      const result = await fetchOpinions({ variables: { first: quantityPerPage, after }, fetchPolicy: 'network-only' });
 
       if (result.error) {
         setError(result.error.message);
@@ -52,18 +44,26 @@ const Opinions = () => {
       }
 
       newCursors[page] = result.data!.opinions.pageInfo.endCursor;
-      if (page === activePage) setOpinionsResponse(result.data!.opinions);
+      if (page === targetPage) setOpinionsResponse(result.data!.opinions);
     }
 
     setCursors(newCursors);
     setIsLoading(false);
   };
 
+  const refetch = async () => {
+    setCursors([]);
+    setActivePage(0);
+    setIsLoading(true);
+    setError(null);
+    await processFetchingOpinions({ targetPage: 0, currentCursors: [] });
+  };
+
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    processFetchingOpinions();
-  }, [activePage, fetchOpinionRefreshKey]);
+    processFetchingOpinions({ targetPage: activePage, currentCursors: cursors });
+  }, [activePage]);
 
   if (isLoading) return <LoadingModal isOpen={isLoading} info="Trwa pobieranie opini!" />;
   if (error) return <h1>error</h1>;
