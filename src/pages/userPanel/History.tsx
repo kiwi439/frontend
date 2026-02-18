@@ -34,7 +34,7 @@ const History = () => {
 
     for (let page = startPage; page <= activePage; page++) {
       after = page === 0 ? undefined : (newCursors[page - 1] ?? undefined);
-      const result = await fetchOrders({ variables: { first: quantityPerPage, after, userId: loggedUserId } });
+      const result = await fetchOrders({ variables: { first: quantityPerPage, after, userId: loggedUserId }, fetchPolicy: 'network-only' });
 
       if (result.error) {
         setIsLoading(false);
