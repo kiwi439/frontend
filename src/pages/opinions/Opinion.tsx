@@ -9,9 +9,9 @@ import Avatar from 'components/Avatar.jsx';
 import { APPEARING_IN_SEQUENCE } from 'data/animations';
 import { generateOpinionContent } from 'services/opinions';
 
-type OpinionProps = { opinionsData: OpinionType, index: number };
+type OpinionProps = { opinion: OpinionType, index: number };
 
-const Opinion = ({ opinionsData: { content, mark, updatedAt, user: { email, avatars } }, index }: OpinionProps) => {
+const Opinion = ({ opinion: { content, mark, updatedAt, user: { email, avatars } }, index }: OpinionProps) => {
   const blockName = 'opinion';
   const displayedNumberOfChars = 25;
   const [contentExpanded, setContentExpanded] = useState(false);

@@ -13,7 +13,7 @@ import SubmitButton from 'components/SubmitButton';
 type AddOpinionFormProps = {
   setIsOpinionAdded: (isOpinionAdded: boolean) => void,
   setIsAddedOpinionError: (isError: boolean) => void,
-  refetchOpinions: () => void,
+  refetchOpinions: () => Promise<void>,
   textareaRef: React.RefObject<HTMLTextAreaElement>
 };
 
@@ -24,10 +24,14 @@ const AddOpinionForm = ({ setIsOpinionAdded, setIsAddedOpinionError, textareaRef
   const [opinionValidationError, setOpinionValidationError] = useState('');
   const [addedOpinion, setAddedOpinion] = useState('');
   const [addOpinion] = useMutation(ADD_OPINION, {
-    onCompleted: () => {
-      refetchOpinions();
-      clearForm();
-      setIsOpinionAdded(true);
+    onCompleted: async () => {
+      try {
+        await refetchOpinions();
+        clearForm();
+        setIsOpinionAdded(true);
+      } catch (error) {
+        setIsAddedOpinionError(true);
+      }
     },
     onError: () => setIsAddedOpinionError(true)
   });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { Categories } from 'types/category';
 import { GetProductsResponse } from 'types/product';
 import useScrollIntoElement from 'hooks/useScrollIntoElement';
@@ -13,68 +13,128 @@ import Pagination from 'components/Pagination';
 
 type ProductsProps = { arePromoted?: boolean };
 
+const BLOCK_NAME = 'products';
+const QUANTITY_PER_PAGE = 5;
+
 const Products = ({ arePromoted = false }: ProductsProps) => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const blockName = 'products';
-  const quantityPerPage = 5;
   const productType = searchParams.get('type') as Categories | null;
-  const headerCaption = generateHeaderCaption(arePromoted, productType);
   const [activePage, setActivePage] = useState(0);
+  const [cursors, setCursors] = useState<Map<number, string | null>>(new Map([[0, null]]));
   const [fetchingProductError, setFetchingProductError] = useState(false);
-  const { loading, error, data } = useQuery<GetProductsResponse>(
-    GET_PRODUCTS,
-    {
-      variables: {
-        input: { promoted: arePromoted, type: productType, pagination: { page: activePage, quantityPerPage } }
+  const [fetchProducts, { loading, error, data, called }] = useLazyQuery<GetProductsResponse>(GET_PRODUCTS);
+
+  const handlePaginationOnChange = async (pageNumber: number) => {
+    const selectedPageIndex = pageNumber - 1;
+    const isSkippingPages = selectedPageIndex > activePage + 1;
+    const needsLoadIndirectPages = !cursors.has(selectedPageIndex);
+    
+    let currentCursor = cursors.get(selectedPageIndex) || null;
+    
+    if (isSkippingPages && needsLoadIndirectPages) {
+      currentCursor = cursors.get(activePage + 1) ?? null;
+      let currentPage = activePage + 1;
+      
+      while (currentPage < selectedPageIndex && currentCursor) {
+        const pageToSave = currentPage + 1;
+        const result = await fetchProducts({
+          variables: {
+            first: QUANTITY_PER_PAGE,
+            after: currentCursor,
+            promoted: arePromoted,
+            type: productType
+          },
+          onCompleted: (data: GetProductsResponse) => {
+            setCursors(prev => {
+              const newCursors = new Map(prev);
+              newCursors.set(pageToSave, data.products.pageInfo.endCursor);
+              return newCursors;
+            });
+          },
+          onError: () => setFetchingProductError(true)
+        });
+        
+        currentPage++;
+        currentCursor = result.data!.products.pageInfo.endCursor;
       }
     }
+    
+    setActivePage(selectedPageIndex);
+
+    fetchProducts({ variables: { first: QUANTITY_PER_PAGE, after: currentCursor, promoted: arePromoted, type: productType },
+      onCompleted: (data: GetProductsResponse) => {
+        setCursors(prev => {
+          const newCursors = new Map(prev);
+          newCursors.set(selectedPageIndex + 1, data.products.pageInfo.endCursor);
+          return newCursors;
+        });
+      },
+      onError: () => setFetchingProductError(true)
+    });
+  };
+
+  const renderLoadingModal = () => (
+    <LoadingModal isOpen={loading || !called} info="Trwa pobieranie produktów!" />
   );
 
-  const handlePaginationOnChange = (pageNumber: number) => setActivePage(pageNumber - 1);
+  const renderErrorModal = () => (
+    <ErrorModal 
+      isOpen={fetchingProductError} 
+      handleOnClose={() => setFetchingProductError(false)} 
+      info="Nie udało się pobrać listy produktów" 
+    />
+  );
 
-  useScrollIntoElement({ scrollDependency: location.key, elementSelector: `.${blockName}__header` });
-  useEffect(() => { if (error) { setFetchingProductError(true); } }, [error]);
+  const renderProducts = () => {
+    const { products: { totalCount, edges } } = data!;
 
-  let content;
-
-  if (loading) {
-    content = <LoadingModal isOpen={loading} info="Trwa pobieranie produktów!" />;
-  } else if (error) {
-    content = <ErrorModal isOpen={fetchingProductError} handleOnClose={() => setFetchingProductError(false)} info="Nie udało się pobrać listy produktów" />;
-  } else {
-    const { productsDetails: { totalCount, products } } = data!;
-
-    content = (
+    return (
       <>
-        <div className={`${blockName}__list`}>
-          {
-            products.map((product, index) => (
-              <Product
-                product={product}
-                key={product.id}
-                index={index}
-                mode="main"
-              />
-            ))
-          }
+        <div className={`${BLOCK_NAME}__list`}>
+          {edges.map((edge, index) => <Product product={edge.node} key={edge.node.id} index={index} mode="main" />)}
         </div>
         <Pagination
           activePage={activePage}
           onChange={handlePaginationOnChange}
           itemsQuantity={totalCount}
-          quantityPerPage={quantityPerPage}
+          quantityPerPage={QUANTITY_PER_PAGE}
         />
       </>
     );
-  }
+  };
+
+  const renderContent = () => {
+    if (loading || !called) return renderLoadingModal();
+    if (error) return renderErrorModal();
+
+    return renderProducts();
+  };
+
+  useScrollIntoElement({ scrollDependency: location.key, elementSelector: `.${BLOCK_NAME}__header` });
+
+  useEffect(() => {
+    setActivePage(0);
+    setCursors(new Map([[0, null]]));
+    
+    fetchProducts({ variables: { first: QUANTITY_PER_PAGE, after: null, promoted: arePromoted, type: productType },
+      onCompleted: (data: GetProductsResponse) => {
+        setCursors(prev => {
+          const newCursors = new Map(prev);
+          newCursors.set(1, data.products.pageInfo.endCursor);
+          return newCursors;
+        });
+      },
+      onError: () => setFetchingProductError(true)
+    });
+  }, [productType, arePromoted]);
 
   return (
-    <div className={`main__${blockName} ${blockName}`}>
-      <h2 className={`${blockName}__header`}>
-        {headerCaption}
+    <div className={`main__${BLOCK_NAME} ${BLOCK_NAME}`}>
+      <h2 className={`${BLOCK_NAME}__header`}>
+        {generateHeaderCaption(arePromoted, productType)}
       </h2>
-      {content}
+      {renderContent()}
     </div>
   );
 };
