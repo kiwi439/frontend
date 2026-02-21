@@ -1,0 +1,111 @@
+name: CI
+on: push
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should-lint-css: ${{ steps.path-filter.outputs.css }}
+      should-lint-ts: ${{ steps.path-filter.outputs.js }}
+      should-validate-packages: ${{ steps.path-filter.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v3
+        id: path-filter
+        with:
+          filters: |
+            css:
+              - '**/*.css'
+              - '**/*.scss'
+              - '.stylelintrc*'
+              - 'package.json'
+            js:
+              - '**/*.ts'
+              - '**/*.tsx'
+              - '**/*.js'
+              - '**/*.jsx'
+              - 'eslint.config.*'
+              - 'tsconfig*.json'
+              - 'package.json'
+            packages:
+              - 'package.json'
+              - 'package-lock.json'
+              - '.depcheckrc*'
+  stylelint:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should-lint-css == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Bootstrap environment
+        uses: ./.github/actions/bootstrap
+      - name: Run stylelint
+        run: npm run lint:stylelint
+  eslint:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should-lint-ts == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Bootstrap environment
+        uses: ./.github/actions/bootstrap
+      - name: Run eslint
+        run: npm run lint:eslint
+  validate-packages:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should-validate-packages == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Bootstrap environment
+        uses: ./.github/actions/bootstrap
+      - name: Validate packages usefulness
+        run: npm run packages:validate-usefulness
+  basic-tests:
+    runs-on: ubuntu-latest
+    env:
+      API_URL: http://localhost:3333
+      AWS_ACCESS_KEY_ID: ${{ secrets.BUDOMAN_FRONTEND_AWS_ACCESS_KEY_ID }}
+      AWS_BUCKET: budoman-development
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.BUDOMAN_FRONTEND_AWS_SECRET_ACCESS_KEY }}
+    strategy:
+      matrix:
+        include:
+          - check: Unit tests with Jest
+            script: test:unit:jest
+          - check: Unit tests with RTL
+            script: test:unit:rtl
+          - check: Integration tests
+            script: test:integration
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Bootstrap environment
+      uses: ./.github/actions/bootstrap
+    - name: Start ${{ matrix.check }}
+      run: npm run ${{ matrix.script }}
+  e2e-tests:
+    name: E2E tests
+    needs: basic-tests
+    uses: michal-siwiec/system-tests/.github/workflows/shop_e2e_tests.yml@develop
+    with:
+      budoman-frontend_branch: ${{ github.ref_name }}
+    secrets:
+      BUDOMAN_FRONTEND_AWS_ACCESS_KEY_ID: ${{ secrets.BUDOMAN_FRONTEND_AWS_ACCESS_KEY_ID }}
+      BUDOMAN_FRONTEND_AWS_SECRET_ACCESS_KEY: ${{ secrets.BUDOMAN_FRONTEND_AWS_SECRET_ACCESS_KEY }}
+      BUDOMAN_BACKEND_AWS_ACCESS_KEY_ID: ${{ secrets.BUDOMAN_BACKEND_AWS_ACCESS_KEY_ID }}
+      BUDOMAN_BACKEND_AWS_SECRET_ACCESS_KEY: ${{ secrets.BUDOMAN_BACKEND_AWS_SECRET_ACCESS_KEY }}
+      BUDOMAN_BACKEND_SIDEKIQ_PANEL_LOGIN: ${{ secrets.BUDOMAN_BACKEND_SIDEKIQ_PANEL_LOGIN }}
+      BUDOMAN_BACKEND_SIDEKIQ_PANEL_PASSWORD: ${{ secrets.BUDOMAN_BACKEND_SIDEKIQ_PANEL_PASSWORD }}
+  notify-deploy-doable:
+    needs: e2e-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Notify deploy is doable
+        uses: ./.github/actions/notify-deploy-doable
+        with:
+          smtp-password: ${{ secrets.SMTP_PASSWORD }}

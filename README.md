@@ -26,8 +26,8 @@ Some of them are optional - linters, and packages usefulness (may be broken beca
 
 ```bash
 npm run packages:validate-usefulness # to launch tool which checks which gems are not used
-npm run lint:css # To launch linter for CSS files
-npm run lint:ts # To launch linter for JS, TS files
+npm run lint:stylelint # To launch linter for CSS/SCSS files
+npm run lint:eslint # To launch linter for JS, TS files
 npm run test:unit:jest # to launch unit tests written with JEST
 npm run test:unit:rtl # To launch unit tests written with RTL
 npm run test:integration # To launch integration tests written with RTL

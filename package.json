@@ -9,8 +9,8 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/config.development.js",
     "packages:validate-usefulness": "depcheck",
-    "lint:css": "npx stylelint '**/*.css' '**/*.scss'",
-    "lint:ts": "npx eslint '**/*.js' '**/*.jsx' '**/*.ts' '**/*.tsx'",
+    "lint:stylelint": "npx stylelint '**/*.css' '**/*.scss'",
+    "lint:eslint": "npx eslint '**/*.js' '**/*.jsx' '**/*.ts' '**/*.tsx'",
     "test:unit:jest": "jest tests/unit --testPathIgnorePatterns rtl.test.ts",
     "test:unit:rtl": "jest tests/unit --testMatch '**/*.rtl.test.tsx'",
     "test:integration": "jest tests/integration --testMatch '**/*.rtl.test.tsx'",
