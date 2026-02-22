@@ -89,7 +89,7 @@ jobs:
   e2e-tests:
     name: E2E tests
     needs: basic-tests
-    uses: michal-siwiec/system-tests/.github/workflows/shop_e2e_tests.yml@develop
+    uses: kiwi439/system-tests/.github/workflows/shop_e2e_tests.yml@develop
     with:
       budoman-frontend_branch: ${{ github.ref_name }}
     secrets:
