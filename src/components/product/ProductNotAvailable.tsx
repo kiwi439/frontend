@@ -24,7 +24,7 @@ const ProductNotAvailable = ({ product, index }: ProductNotAvailableProps) => {
         initial: APPEARING_IN_SEQUENCE.hidden,
         animate: APPEARING_IN_SEQUENCE.visible(index)
       }}
-      dataTestId="product-container-unavailable"
+      dataTestId="product-container"
     >
       <div className={`${blockName}__unavailable-overlay`}>
         <div className={`${blockName}__img-wrapper`}>
