@@ -53,6 +53,17 @@
     justify-content: center;
   }
 
+  &__unavailable-overlay {
+    display: flex;
+    flex-wrap: wrap;
+    opacity: 0.44;
+  }
+
+  &__unavailable-label {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
   &--basket {
     .product__img-wrapper {
       @media screen and (min-width: $xs-breakpoint) {

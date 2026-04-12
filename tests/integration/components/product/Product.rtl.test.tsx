@@ -44,4 +44,9 @@ describe('Product', () => {
     expect(screen.getByText(/Lorem ipsum, dolor/)).toBeInTheDocument();
     expect(screen.getByDisplayValue(222)).toBeInTheDocument();
   });
+
+  it('renders product not available when available quantity is zero', () => {
+    renderWithProviders(<Product product={{ ...product, availableQuantity: 0 }} index={0} mode="main" />);
+    expect(screen.getByText('Produkt niedostępny')).toBeInTheDocument();
+  });
 });

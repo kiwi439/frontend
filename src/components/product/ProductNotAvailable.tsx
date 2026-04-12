@@ -1,44 +1,32 @@
-import React, { Fragment } from 'react';
-import clsx from 'clsx';
+import React from 'react';
 import useFetchUrl from 'hooks/useFetchUrl';
 import { Product as ProductType } from 'types/product';
 import ShadowedContainer from 'components/containers/ShadowedContainer';
 import { APPEARING_IN_SEQUENCE } from 'data/animations';
 import { formatPrice } from 'utils/helpers';
-import AddToBasketForm from './AddToBasketForm';
-import ProductNotAvailable from './ProductNotAvailable';
-import SelectedQuantityPresenter from './SelectedQuantityPresenter';
 
-type ProductProps = {
+type ProductNotAvailableProps = {
   product: ProductType['attributes'],
-  index: number,
-  mode: 'main' | 'basket'
+  index: number
 };
 
-const Product = ({ product, index, mode }: ProductProps) => {
+const ProductNotAvailable = ({ product, index }: ProductNotAvailableProps) => {
   const blockName = 'product';
-  const { id, name, price, pictureBucket, pictureKey, availableQuantity } = product;
-  const isMainMode = mode === 'main';
-  const isBasketMode = mode === 'basket';
-
+  const { name, price, pictureBucket, pictureKey } = product;
   const pictureURL = useFetchUrl({ bucket: pictureBucket, key: pictureKey });
-
-  if (isMainMode && availableQuantity === 0) {
-    return <ProductNotAvailable product={product} index={index} />;
-  }
 
   return (
     <ShadowedContainer
-      classNames={clsx(blockName, isBasketMode && `${blockName}--basket`)}
+      classNames={blockName}
       animationAttributes={{
         variants: APPEARING_IN_SEQUENCE,
         custom: index,
         initial: APPEARING_IN_SEQUENCE.hidden,
         animate: APPEARING_IN_SEQUENCE.visible(index)
       }}
-      dataTestId="product-container"
+      dataTestId="product-container-unavailable"
     >
-      <Fragment>
+      <div className={`${blockName}__unavailable-overlay`}>
         <div className={`${blockName}__img-wrapper`}>
           <img
             src={pictureURL}
@@ -52,12 +40,13 @@ const Product = ({ product, index, mode }: ProductProps) => {
           <p className={`${blockName}__description`}>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus, consequatur. Ex blanditiis accusamus nam molestiae officiis totam repellendus labore beatae ullam quas, hic facilis fugit illum tenetur, magni est distinctio.
           </p>
-          { isMainMode && <AddToBasketForm product={product} /> }
-          { isBasketMode && <SelectedQuantityPresenter productID={id} /> }
+          <p className={`${blockName}__unavailable-label`} role="status">
+            Produkt niedostępny
+          </p>
         </div>
-      </Fragment>
+      </div>
     </ShadowedContainer>
   );
 };
 
-export default Product;
+export default ProductNotAvailable;
