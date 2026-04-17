@@ -14,6 +14,7 @@ import Newsletter from 'pages/userPanel/Newsletter/Newsletter';
 import RemoveAccount from 'pages/userPanel/RemoveAccount';
 import Avatars from 'pages/userPanel/Avatars/Avatars.jsx';
 import NotFound from 'pages/NotFound';
+import PaymentCanceled from 'pages/PaymentCanceled';
 
 const AppRouter = () => (
   <div className="main">
@@ -25,6 +26,7 @@ const AppRouter = () => (
       <Route path="/opinions" element={<Opinions />} />
       <Route path="/order" element={<Order />} />
       <Route path="/thank-you-page" element={<ThankYouPage />} />
+      <Route path="/payment-canceled" element={<PaymentCanceled />} />
       <Route path="/user-panel" element={<UserPanel />}>
         <Route path="" element={<MyDetails />} />
         <Route path="data" element={<MyDetails />} />
