@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import ShadowedContainer from 'components/containers/ShadowedContainer';
 import SubmitButton from 'components/SubmitButton';
 
+// TODO
+// Kazdy tu moze wejść
+// Brak powiązania z platnościa
+// Brak pokazywania danych platnosci
+
 const PaymentCanceled = () => {
   const blockName = 'payment-canceled';
   const navigate = useNavigate();
