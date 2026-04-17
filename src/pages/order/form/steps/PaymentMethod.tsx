@@ -3,42 +3,42 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'types/store';
 import { setPaymentMethod } from 'redux_/order/actionsCreator';
 import { OrderContext } from 'contexts/contexts';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PaymentIcon from '@mui/icons-material/Payment';
-import PaidIcon from '@mui/icons-material/Paid';
 import CheckBox from 'components/inputs/CheckBox';
 import SubmitButton from 'components/SubmitButton';
 
 const PaymentMethod = () => {
   const blockName = 'payment-method';
   const { setStep } = useContext(OrderContext);
-  const { cashPayment, traditionalTransfer } = useSelector((store: RootState) => store.order.payment);
+  const { stripePayment, traditionalTransfer } = useSelector((store: RootState) => store.order.payment);
   const dispatch = useDispatch();
 
-  const handleCashPaymentOnChange = () => {
-    dispatch(setPaymentMethod({ cashPayment: true, traditionalTransfer: false }));
-  };
-
-  const handleTraditionalPaymentOnChange = () => {
-    dispatch(setPaymentMethod({ cashPayment: false, traditionalTransfer: true }));
-  };
-
   const handleSubmitOnMouseDown = () => setStep(3);
+
+  const handlePaymentMethodOnChange = (paymentMethod: 'stripe' | 'traditional') => {
+    if (paymentMethod === 'stripe') {
+      dispatch(setPaymentMethod({ stripePayment: true, traditionalTransfer: false }));
+    } else {
+      dispatch(setPaymentMethod({ stripePayment: false, traditionalTransfer: true }));
+    }
+  };
 
   return (
     <div className={`order__form-part-container ${blockName}`}>
       <CheckBox
-        onChange={handleCashPaymentOnChange}
-        checked={cashPayment}
+        onChange={() => handlePaymentMethodOnChange('stripe')}
+        checked={stripePayment}
         label={(
           <Fragment>
-            <PaidIcon className={`${blockName}__icon`} />
-            <span className={`${blockName}__icon-label`}>Płatność przy odbiorze</span>
+            <CreditCardIcon className={`${blockName}__icon`} />
+            <span className={`${blockName}__icon-label`}>Płatność Stripe</span>
           </Fragment>
         )}
-        dataTestId="payment-on-delivery-checkbox"
+        dataTestId="stripe-payment-checkbox"
       />
       <CheckBox
-        onChange={handleTraditionalPaymentOnChange}
+        onChange={() => handlePaymentMethodOnChange('traditional')}
         checked={traditionalTransfer}
         label={(
           <Fragment>

@@ -1,8 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
 
 type SetDeliveryMethodPayload = { inPost: boolean, dpd: boolean, pickUpAtThePoint: boolean };
-type SetPaymentMethodPayload = { cashPayment: boolean, traditionalTransfer: boolean };
-type SetCompletedOrder = { order: { id: string, totalPrice: number, paymentMethod: 'cashPayment' | 'traditionalTransfer' } }
+type SetPaymentMethodPayload = { stripePayment: boolean, traditionalTransfer: boolean };
+type SetCompletedOrder = { order: { id: string, totalPrice: number, paymentMethod: 'traditional_transfer' | 'stripe_payment' } }
 
 export const setName = createAction<string>('setName');
 export const setSurname = createAction<string>('setSurname');

@@ -7,10 +7,10 @@ const persistConfig = { key: 'order', storage };
 const initialState = {
   clientDetails: { name: '', surname: '', street: '', city: '', postalCode: '', email: '', phoneNumber: '' },
   delivery: { inPost: true, dpd: false, pickUpAtThePoint: false },
-  payment: { cashPayment: false, traditionalTransfer: true },
+  payment: { stripePayment: true, traditionalTransfer: false },
   orderID: null as string | null,
   totalPrice: null as number | null,
-  paymentMethod: null as string | null
+  paymentMethod: null as 'traditional_transfer' | 'stripe_payment' | null
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -41,8 +41,8 @@ const reducer = createReducer(initialState, (builder) => {
       state.delivery.dpd = dpd;
       state.delivery.pickUpAtThePoint = pickUpAtThePoint;
     })
-    .addCase(setPaymentMethod, (state, { payload: { cashPayment, traditionalTransfer } }) => {
-      state.payment.cashPayment = cashPayment;
+    .addCase(setPaymentMethod, (state, { payload: { stripePayment, traditionalTransfer } }) => {
+      state.payment.stripePayment = stripePayment;
       state.payment.traditionalTransfer = traditionalTransfer;
     })
     .addCase(setCompletedOrder, (state, { payload: { order: { id, totalPrice, paymentMethod } } }) => {
