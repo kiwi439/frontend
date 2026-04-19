@@ -11,8 +11,6 @@ import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import SubmitButton from 'components/SubmitButton';
 
-// TODO: setCompletedOrder - czy to jest gdzies uzywane?
-
 const Summary = () => {
   const blockName = 'summary';
   const dispatch = useDispatch();

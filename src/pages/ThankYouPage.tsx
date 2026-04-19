@@ -7,7 +7,7 @@ import SubmitButton from 'components/SubmitButton';
 const ThankYouPage = () => {
   const blockName = 'thank-you-page';
   const { loggedUserId } = useSelector((store: RootState) => store.user);
-  const { orderID } = useSelector((store: RootState) => store.order);
+  const orderID: string = '123'; // TODO: Realna wartosc
 
   const downloadInvoice = () => {
     const key = `users/${loggedUserId}/invoices/${orderID}.pdf`;
