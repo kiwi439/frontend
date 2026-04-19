@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { RootState } from 'types/store';
-import { setCompletedOrder } from 'redux_/order/actionsCreator';
 import { clearBasket } from 'redux_/basket/actionCreators';
 import { countTotalPrice } from 'utils/helpers';
 import { ADD_ORDER } from 'graphql/mutations/order';
@@ -13,24 +11,22 @@ import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import SubmitButton from 'components/SubmitButton';
 
+// TODO: setCompletedOrder - czy to jest gdzies uzywane?
+
 const Summary = () => {
   const blockName = 'summary';
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { addedProducts } = useSelector((store: RootState) => store.basket);
   const [orderError, setOrderError] = useState(false);
-  const [addOrder, { loading, data }] = useMutation(
-    ADD_ORDER,
-    {
-      variables: { input: generateAddOrderPayload() },
-      onCompleted: () => {
-        dispatch(setCompletedOrder(data));
-        navigate('/thank-you-page');
-        dispatch(clearBasket());
-      },
-      onError: () => setOrderError(true)
-    }
-  );
+
+  const [addOrder, { loading }] = useMutation(ADD_ORDER, {
+    variables: { input: generateAddOrderPayload() },
+    onCompleted: ({ paymentUrl }) => {
+      dispatch(clearBasket());
+      window.location.assign(paymentUrl);
+    },
+    onError: () => setOrderError(true),
+  });
 
   return (
     <div className={blockName}>
