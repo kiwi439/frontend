@@ -19,11 +19,10 @@ const ORDER_EXAMPLE_STATE = {
     pickUpAtThePoint: false
   },
   payment: {
-    cashPayment: false,
-    traditionalTransfer: true
+    stripePayment: true
   },
   orderID: 'da97aa73-f0e4-4a17-9157-9f17454c73f3',
-  paymentMethod: 'traditional_transfer',
+  paymentMethod: 'stripe_payment',
   totalPrice: 199.99
 }
 

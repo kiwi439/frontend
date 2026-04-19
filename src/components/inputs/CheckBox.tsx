@@ -5,10 +5,10 @@ type CheckBoxProps = {
   checked: boolean,
   classNames?: string,
   dataTestId?: string
-  onChange: () => void
+  onChange?: () => void
 };
 
-const CheckBox = ({ label, checked, onChange, classNames = '', dataTestId = '' }: CheckBoxProps) => (
+const CheckBox = ({ label, checked, onChange = () => {}, classNames = '', dataTestId = '' }: CheckBoxProps) => (
   <div className="checkbox__wrapper">
     <input
       type="checkbox"

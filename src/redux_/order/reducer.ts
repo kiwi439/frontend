@@ -1,16 +1,16 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { setName, setSurname, setStreet, setCity, setPostalCode, setEmail, setPhoneNumber, setDeliveryMethod, setPaymentMethod, setCompletedOrder } from './actionsCreator';
+import { setName, setSurname, setStreet, setCity, setPostalCode, setEmail, setPhoneNumber, setDeliveryMethod, setCompletedOrder } from './actionsCreator';
 
 const persistConfig = { key: 'order', storage };
 const initialState = {
   clientDetails: { name: '', surname: '', street: '', city: '', postalCode: '', email: '', phoneNumber: '' },
   delivery: { inPost: true, dpd: false, pickUpAtThePoint: false },
-  payment: { stripePayment: true, traditionalTransfer: false },
+  payment: { stripePayment: true },
   orderID: null as string | null,
   totalPrice: null as number | null,
-  paymentMethod: null as 'traditional_transfer' | 'stripe_payment' | null
+  paymentMethod: null as 'stripe_payment' | null
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -40,10 +40,6 @@ const reducer = createReducer(initialState, (builder) => {
       state.delivery.inPost = inPost;
       state.delivery.dpd = dpd;
       state.delivery.pickUpAtThePoint = pickUpAtThePoint;
-    })
-    .addCase(setPaymentMethod, (state, { payload: { stripePayment, traditionalTransfer } }) => {
-      state.payment.stripePayment = stripePayment;
-      state.payment.traditionalTransfer = traditionalTransfer;
     })
     .addCase(setCompletedOrder, (state, { payload: { order: { id, totalPrice, paymentMethod } } }) => {
       state.orderID = id;
