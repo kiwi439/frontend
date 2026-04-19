@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'types/store';
 import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
 import SubmitButton from 'components/SubmitButton';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 const ThankYouPage = () => {
   const blockName = 'thank-you-page';
+  const [searchParams] = useSearchParams();
+  const orderID = searchParams.get('order_id');
   const { loggedUserId } = useSelector((store: RootState) => store.user);
-  const orderID: string = '123'; // TODO: Realna wartosc
 
   const downloadInvoice = () => {
     const key = `users/${loggedUserId}/invoices/${orderID}.pdf`;
