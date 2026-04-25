@@ -58,30 +58,27 @@
 
     &--contact {
       display: block;
-
-      a {
-        color: $black;
-        font-weight: 600;
-        display: block;
-      }
-
-      a[href^='tel:'] {
-        white-space: nowrap;
-      }
-
-      span {
-        font-weight: 400;
-        display: block;
-      }
-
-      .thank-you-page__contact-separator {
-        margin: 2px 0;
-      }
-
-      .thank-you-page__contact-mail {
-        overflow-wrap: anywhere;
-      }
     }
+  }
+
+  &__contact-phone {
+    color: $black;
+    font-weight: 600;
+    display: block;
+    white-space: nowrap;
+  }
+
+  &__contact-separator {
+    font-weight: 400;
+    display: block;
+    margin: 2px 0;
+  }
+
+  &__contact-mail {
+    color: $black;
+    font-weight: 600;
+    display: block;
+    overflow-wrap: anywhere;
   }
 
   &__download-invoice-button.button {
