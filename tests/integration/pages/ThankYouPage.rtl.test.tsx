@@ -1,60 +1,116 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import renderWithProviders from 'tests/integration/helpers/renderWithProviders';
 import { generatePreloadedState } from 'tests/integration/helpers/preloadedState';
+import { GET_ORDER } from 'graphql/queries/order';
 import ThankYouPage from 'pages/ThankYouPage';
 import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
 
-jest.mock('services/fetchFileOnLocalFileSystem.ts', () => jest.fn());
+jest.mock('services/fetchFileOnLocalFileSystem', () => jest.fn());
 
 describe('ThankYouPage', () => {
-  it('renders thank you message and payment info if payment method is traditional transfer', () => {
-    renderWithProviders(<ThankYouPage />, { preloadedState: generatePreloadedState({ userStatePresent: true, orderStatePresent: true }) });
+  const orderId = 'da97aa73-f0e4-4a17-9157-9f17454c73f3';
+  const preloadedState = generatePreloadedState({ userStatePresent: true });
 
-    expect(screen.getByText('Dziękujemy za dokonanie zakupu!')).toBeInTheDocument();
-    expect(screen.getByText('Prosimy o dokonanie płatności według poniszych danych:')).toBeInTheDocument();
-    expect(screen.getByText('Kwota do zapłaty:')).toBeInTheDocument();
-    expect(screen.getByText('199.99 zł')).toBeInTheDocument();
-    expect(screen.getByText('Numer konta:')).toBeInTheDocument();
-    expect(screen.getByText('39 1240 6960 4539 1123 2002 9161')).toBeInTheDocument();
-    expect(screen.getByText('Tytuł przelewu:')).toBeInTheDocument();
-    expect(screen.getByText('Zamówienie da97aa73-f0e4-4a17-9157-9f17454c73f3 - Budoman')).toBeInTheDocument();
-    expect(screen.getByText('Nazwa odbiorcy:')).toBeInTheDocument();
-    expect(screen.getByText('Budoman')).toBeInTheDocument();
-    expect(screen.getByText('Adres odbiorcy:')).toBeInTheDocument();
-    expect(screen.getByText('Żywiec 34-300, Beskidzka 50')).toBeInTheDocument();
-    expect(screen.getByText('Pobierz fakturę w formacie PDF')).toBeInTheDocument();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('does not render payment info if payment method is not traditional_transfer', () => {
-    const state = { ...generatePreloadedState({ userStatePresent: true, orderStatePresent: true }) };
-    state.order.paymentMethod = 'cashPayment';
+  describe('success path', () => {
+    it('renders paid order details and allows invoice download', async () => {
+      const mocks = [
+        {
+          request: {
+            query: GET_ORDER,
+            variables: { id: orderId }
+          },
+          result: {
+            data: {
+              order: {
+                paid: true,
+                latestPayment: {
+                  id: 'c79576b2-702f-4259-bc20-ab5aa6ea3dac',
+                  status: 'succeeded',
+                  amountCents: 13698,
+                  provider: 'stripe'
+                }
+              }
+            }
+          }
+        }
+      ];
 
-    renderWithProviders(<ThankYouPage />, { preloadedState: state });
+      renderWithProviders(<ThankYouPage />, {
+        preloadedState,
+        mocks,
+        initialEntries: [`/thank-you-page?order_id=${orderId}`]
+      });
 
-    expect(screen.getByText('Dziękujemy za dokonanie zakupu!')).toBeInTheDocument();
-    expect(screen.queryByText('Prosimy o dokonanie płatności według poniszych danych:')).not.toBeInTheDocument();
-    expect(screen.queryByText('Kwota do zapłaty:')).not.toBeInTheDocument();
-    expect(screen.queryByText('199.99 zł')).not.toBeInTheDocument();
-    expect(screen.queryByText('Numer konta:')).not.toBeInTheDocument();
-    expect(screen.queryByText('39 1240 6960 4539 1123 2002 9161')).not.toBeInTheDocument();
-    expect(screen.queryByText('Tytuł przelewu:')).not.toBeInTheDocument();
-    expect(screen.queryByText('Zamówienie da97aa73-f0e4-4a17-9157-9f17454c73f3 - Budoman')).not.toBeInTheDocument();
-    expect(screen.queryByText('Nazwa odbiorcy:')).not.toBeInTheDocument();
-    expect(screen.queryByText('Budoman')).not.toBeInTheDocument();
-    expect(screen.queryByText('Adres odbiorcy:')).not.toBeInTheDocument();
-    expect(screen.queryByText('Żywiec 34-300, Beskidzka 50')).not.toBeInTheDocument();
-    expect(screen.getByText('Pobierz fakturę w formacie PDF')).toBeInTheDocument();
+      expect(screen.getByText('Pobieramy status zamówienia i płatności…')).toBeInTheDocument();
+
+      await waitFor(() => {
+        expect(screen.getByText('Płatność została opłacona.')).toBeInTheDocument();
+      });
+
+      expect(screen.getByText('Provider')).toBeInTheDocument();
+      expect(screen.getByText('STRIPE')).toBeInTheDocument();
+      expect(screen.getByText('Status')).toBeInTheDocument();
+      expect(screen.getByText('Opłacono')).toBeInTheDocument();
+      expect(screen.getByText('Kwota')).toBeInTheDocument();
+      expect(screen.getByText('136.98 zł')).toBeInTheDocument();
+
+      fireEvent.mouseDown(screen.getByText('Pobierz fakturę w formacie PDF'));
+
+      expect(fetchFileOnLocalFileSystem).toHaveBeenCalledWith(
+        `users/0c1069c7-8e77-4749-bc4b-e308c6679d1c/invoices/${orderId}.pdf`,
+        `Faktura za zamówienie: ${orderId}`
+      );
+    });
   });
 
-  it('calls fetchFileOnLocalFileSystem with correct arguments on button click', () => {
-    renderWithProviders(<ThankYouPage />, { preloadedState: generatePreloadedState({ userStatePresent: true, orderStatePresent: true }) });
+  describe('failure path', () => {
+    it('renders failure summary with support details', async () => {
+      const mocks = [
+        {
+          request: {
+            query: GET_ORDER,
+            variables: { id: orderId }
+          },
+          result: {
+            data: {
+              order: {
+                paid: false,
+                latestPayment: {
+                  id: 'c79576b2-702f-4259-bc20-ab5aa6ea3dac',
+                  status: 'expired',
+                  amountCents: 13698,
+                  provider: 'stripe'
+                }
+              }
+            }
+          }
+        }
+      ];
 
-    fireEvent.mouseDown(screen.getByText('Pobierz fakturę w formacie PDF'));
+      renderWithProviders(<ThankYouPage />, {
+        preloadedState,
+        mocks,
+        initialEntries: [`/thank-you-page?order_id=${orderId}`]
+      });
 
-    expect(fetchFileOnLocalFileSystem).toHaveBeenCalledWith(
-      'users/0c1069c7-8e77-4749-bc4b-e308c6679d1c/invoices/da97aa73-f0e4-4a17-9157-9f17454c73f3.pdf',
-      'Faktura za zamówienie: da97aa73-f0e4-4a17-9157-9f17454c73f3'
-    );
+      expect(screen.getByText('Pobieramy status zamówienia i płatności…')).toBeInTheDocument();
+
+      await waitFor(() => {
+        expect(screen.getByText('Niestety płatność nie została zrealizowana.')).toBeInTheDocument();
+      });
+
+      expect(screen.getByText('Wygasło')).toBeInTheDocument();
+      expect(screen.getByText('ID płatności')).toBeInTheDocument();
+      expect(screen.getByText('c79576b2-702f-4259-bc20-ab5aa6ea3dac')).toBeInTheDocument();
+      expect(screen.getByText('Kontakt')).toBeInTheDocument();
+      expect(screen.getByText('724 131 140')).toBeInTheDocument();
+      expect(screen.getByText('siwiec.michal724@gmail.com')).toBeInTheDocument();
+      expect(screen.queryByText('Pobierz fakturę w formacie PDF')).not.toBeInTheDocument();
+    });
   });
 });
