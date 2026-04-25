@@ -1,40 +1,99 @@
 .thank-you-page {
-  width: 100%;
-  margin: 0 auto;
-  padding: 30px 10px;
-
-  @media screen and (min-width: $md-breakpoint) {
-    width: 800px;
+  &__form-container {
+    padding: 35px 0;
   }
 
-  &__main-header {
-    line-height: 1.1;
-    margin-bottom: 15px;
+  .form-container__header {
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  &__payment-summary {
+    flex-basis: 80%;
+    margin-bottom: 16px;
     text-align: center;
+    font-weight: 600;
+    line-height: 1.4;
+
+    &--error {
+      color: $red;
+    }
   }
 
-  &__secondary-header {
-    margin-bottom: 25px;
-    text-align: center;
+  &__payment-details {
+    box-sizing: border-box;
+    flex-basis: 80%;
+    margin: 0 auto 18px;
+    padding: 12px 14px;
+    border: 1px solid rgba($gray, 40%);
+    border-radius: $default-box-border-radious;
+    background-color: transparent;
   }
 
-  &__transfer-info-wrapper {
-    width: 80%;
-    margin: 0 auto 25px;
+  &__payment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+
+    &:not(:last-child) {
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba($gray, 40%);
+    }
   }
 
-  &__transfer-info-label {
-    color: $gray;
-  }
-
-  &__transfer-info-value {
-    color: $black;
+  &__payment-label {
+    flex: 0 0 88px;
     font-weight: bold;
-    padding-left: 10px;
+    font-size: 14px;
   }
 
-  &__download-invoice-button {
-    width: 80%;
-    margin: 0 auto;
+  &__payment-value {
+    flex: 1;
+    color: $black;
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+
+    &--contact {
+      display: block;
+
+      a {
+        color: $black;
+        font-weight: 600;
+        display: block;
+      }
+
+      a[href^='tel:'] {
+        white-space: nowrap;
+      }
+
+      span {
+        font-weight: 400;
+        display: block;
+      }
+
+      .thank-you-page__contact-separator {
+        margin: 2px 0;
+      }
+
+      .thank-you-page__contact-mail {
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+
+  &__download-invoice-button.button {
+    box-sizing: border-box;
+    flex-basis: 80%;
+    margin: 0 auto 10px;
+  }
+
+  &__status-message {
+    flex-basis: 80%;
+    margin: 0 auto 10px;
+    text-align: center;
+    line-height: 1.4;
   }
 }
