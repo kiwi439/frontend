@@ -34,7 +34,5 @@ npm run test:integration # To launch integration tests written with RTL
 ```
 
 ## Deploy
-To make a deploy on PROD env use:
-```bash
-bin/deploy.sh
-```
+Deploy is triggered using Render platform
+
