@@ -16,7 +16,10 @@ const Stepper = ({ activeStep, handleStepOnClick, labels }: StepperType) => {
       {
         labels.map((label, index) => (
           <Step key={uuidv4()}>
-            <StepLabel onClick={() => handleStepOnClick(index)}>
+            <StepLabel
+              className={`${blockName}__label ${index < activeStep ? `${blockName}__label--clickable` : ''}`}
+              onClick={() => handleStepOnClick(index)}
+            >
               {label}
             </StepLabel>
           </Step>

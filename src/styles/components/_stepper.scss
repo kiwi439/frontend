@@ -2,6 +2,16 @@
   width: 80%;
   margin: 0 auto;
 
+  &__label {
+    border-radius: $default-control-border-radious;
+    transition: background-color $default-hover-animation-time;
+    cursor: default;
+
+    &--clickable {
+      cursor: pointer;
+    }
+  }
+
   .MuiStepLabel-labelContainer {
     @media screen and (max-width: $xs-breakpoint) {
       display: none;
