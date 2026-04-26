@@ -1,66 +1,160 @@
-import React, { Fragment } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'types/store';
 import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
 import SubmitButton from 'components/SubmitButton';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { GET_ORDER } from 'graphql/queries/order';
+import useRedirect from 'hooks/useRedirect';
+import LoadingModal from 'components/modals/LoadingModal';
+import ErrorModal from 'components/modals/ErrorModal';
+import FormContainer from 'components/containers/FormContainer';
+import { SHOP_MAIL, SHOP_PHONE } from 'data/uiElements';
+import { formatPhoneNumber } from 'utils/helpers';
+
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  succeeded: 'Opłacono',
+  failed: 'Nieopłacono',
+  expired: 'Wygasło',
+  pending: 'Oczekuje na płatność'
+};
 
 const ThankYouPage = () => {
   const blockName = 'thank-you-page';
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const orderID = searchParams.get('order_id') as string;
   const { loggedUserId } = useSelector((store: RootState) => store.user);
-  const { orderID, paymentMethod, totalPrice } = useSelector((store: RootState) => store.order);
 
-  const isTraditionalTransfer = paymentMethod === 'traditional_transfer';
+  useRedirect({ path: '/', shouldRedirect: !loggedUserId });
 
-  const downloadInvoice = () => {
-    const key = `users/${loggedUserId}/invoices/${orderID}.pdf`;
-    const fileName = `Faktura za zamówienie: ${orderID}`;
+  const { data, loading, error, startPolling, stopPolling } = useQuery(GET_ORDER, {
+    variables: { id: orderID },
+    fetchPolicy: 'network-only',
+  });
 
-    fetchFileOnLocalFileSystem(key, fileName);
+  const paymentStatus = data?.order?.latestPayment?.status;
+
+  const renderLoadingModal = (): ReactElement => {
+    return <LoadingModal isOpen info="Pobieramy status zamówienia i płatności…" />;
   };
 
-  return (
-    <div className={blockName}>
-      <h1 className={`${blockName}__main-header`}>Dziękujemy za dokonanie zakupu!</h1>
-      {
-        isTraditionalTransfer && (
-          <Fragment>
-            <h4 className={`${blockName}__secondary-header`}>Prosimy o dokonanie płatności według poniszych danych:</h4>
-            <div className={`${blockName}__transfer-info-wrapper`}>
-              <ul>
-                <li>
-                  <span className={`${blockName}__transfer-info-label`}>Kwota do zapłaty:</span>
-                  <span className={`${blockName}__transfer-info-value`}>{totalPrice} zł</span>
-                </li>
-                <li>
-                  <span className={`${blockName}__transfer-info-label`}>Numer konta:</span>
-                  <span className={`${blockName}__transfer-info-value`}>39 1240 6960 4539 1123 2002 9161</span>
-                </li>
-                <li>
-                  <span className={`${blockName}__transfer-info-label`}>Tytuł przelewu:</span>
-                  <span className={`${blockName}__transfer-info-value`}>
-                    Zamówienie {orderID} - Budoman
-                  </span>
-                </li>
-                <li>
-                  <span className={`${blockName}__transfer-info-label`}>Nazwa odbiorcy:</span>
-                  <span className={`${blockName}__transfer-info-value`}>Budoman</span>
-                </li>
-                <li>
-                  <span className={`${blockName}__transfer-info-label`}>Adres odbiorcy:</span>
-                  <span className={`${blockName}__transfer-info-value`}>Żywiec 34-300, Beskidzka 50</span>
-                </li>
-              </ul>
-            </div>
-          </Fragment>
-        )
-      }
-      <SubmitButton
-        value="Pobierz fakturę w formacie PDF"
-        classNames={`${blockName}__download-invoice-button`}
-        onMouseDown={downloadInvoice}
-      />
-    </div>
+  const renderErrorModal = (): ReactElement => (
+    <ErrorModal
+      isOpen
+      info='Wystąpił błąd podczas pobierania zamówienia.'
+      handleOnClose={() => navigate('/')}
+    />
   );
+
+  const renderSummary = (): ReactElement => {
+    const renderPaymentDetails = (includeSupportDetails = false): ReactElement => {
+      const latestPayment = data!.order.latestPayment!;
+      const paymentProviderLabel = latestPayment.provider.toUpperCase();
+      const paymentStatusLabel = PAYMENT_STATUS_LABELS[latestPayment.status];
+      const paymentAmountLabel = `${(latestPayment.amountCents / 100).toFixed(2)} zł`;
+  
+      return (
+        <div className={`${blockName}__payment-details`}>
+          <div className={`${blockName}__payment-row`}>
+            <span className={`${blockName}__payment-label`}>Provider</span>
+            <span className={`${blockName}__payment-value`}>{paymentProviderLabel}</span>
+          </div>
+          <div className={`${blockName}__payment-row`}>
+            <span className={`${blockName}__payment-label`}>Status</span>
+            <span className={`${blockName}__payment-value`}>{paymentStatusLabel}</span>
+          </div>
+          <div className={`${blockName}__payment-row`}>
+            <span className={`${blockName}__payment-label`}>Kwota</span>
+            <span className={`${blockName}__payment-value`}>{paymentAmountLabel}</span>
+          </div>
+          {includeSupportDetails && (
+            <>
+              <div className={`${blockName}__payment-row`}>
+                <span className={`${blockName}__payment-label`}>ID płatności</span>
+                <span className={`${blockName}__payment-value`}>{latestPayment.id}</span>
+              </div>
+              <div className={`${blockName}__payment-row`}>
+                <span className={`${blockName}__payment-label`}>Kontakt</span>
+                <span className={`${blockName}__payment-value ${blockName}__payment-value--contact`}>
+                  <a href={`tel:${SHOP_PHONE}`} className={`${blockName}__contact-phone`}>
+                    {formatPhoneNumber(SHOP_PHONE)}
+                  </a>
+                  <span className={`${blockName}__contact-separator`}>lub</span>
+                  <a href={`mailto:${SHOP_MAIL}`} className={`${blockName}__contact-mail`}>
+                    {SHOP_MAIL}
+                  </a>
+                </span>
+              </div>
+            </>
+          )}
+        </div>
+      );
+    };
+
+    const renderPaymentSuccess = (): ReactElement => {
+      const downloadInvoice = () => {
+        const key = `users/${loggedUserId}/invoices/${orderID}.pdf`;
+        const fileName = `Faktura za zamówienie: ${orderID}`;
+        fetchFileOnLocalFileSystem(key, fileName);
+      };
+  
+      return (
+        <div className={blockName}>
+          <FormContainer
+            classNames={`${blockName}__form-container`}
+            header="Dziękujemy za dokonanie zakupu!"
+            form={(
+              <>
+                <p className={`${blockName}__payment-summary`}>Płatność została opłacona.</p>
+                {renderPaymentDetails()}
+                <SubmitButton
+                  value="Pobierz fakturę w formacie PDF"
+                  classNames={`${blockName}__download-invoice-button`}
+                  onMouseDown={downloadInvoice}
+                />
+              </>
+            )}
+          />
+        </div>
+      );
+    };
+  
+    const renderPaymentFailure = (): ReactElement => (
+      <div className={blockName}>
+        <FormContainer
+          classNames={`${blockName}__form-container`}
+          header="Dziękujemy za dokonanie zakupu!"
+          form={(
+            <>
+              <p className={`${blockName}__payment-summary ${blockName}__payment-summary--error`}>Niestety płatność nie została zrealizowana.</p>
+              {renderPaymentDetails(true)}
+            </>
+          )}
+        />
+      </div>
+    );
+
+    if (data.order.paid) {
+      return renderPaymentSuccess();
+    }
+
+    return renderPaymentFailure();
+  };
+
+  useEffect(() => {
+    if (paymentStatus === 'pending') {
+      startPolling(2000);
+    } else {
+      stopPolling();
+    }
+  }, [paymentStatus]);
+
+  if (loading || paymentStatus === 'pending') return renderLoadingModal();
+  if (error) return renderErrorModal();
+
+  return renderSummary();
 };
 
 export default ThankYouPage;
