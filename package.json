@@ -14,7 +14,7 @@
     "test:unit:jest": "jest tests/unit --testPathIgnorePatterns rtl.test.ts",
     "test:unit:rtl": "jest tests/unit --testMatch '**/*.rtl.test.tsx'",
     "test:integration": "jest tests/integration --testMatch '**/*.rtl.test.tsx'",
-    "prod-build": "npx webpack --config ./webpack/config.production.js"
+    "build": "npx webpack --config ./webpack/config.production.js"
   },
   "keywords": [],
   "author": "",
@@ -70,8 +70,6 @@
     "@testing-library/react-hooks": "^8.0.1",
     "aws-sdk": "^2.1048.0",
     "clsx": "^1.2.1",
-    "ejs": "^3.1.8",
-    "express": "^4.18.2",
     "file-saver": "^2.0.5",
     "framer-motion": "^6.2.6",
     "graphql": "^16.2.0",
