@@ -9,7 +9,7 @@ type CheckBoxProps = {
 };
 
 const CheckBox = ({ label, checked, onChange = () => {}, classNames = '', dataTestId = '' }: CheckBoxProps) => (
-  <div className="checkbox__wrapper">
+  <label className="checkbox__wrapper">
     <input
       type="checkbox"
       className={`checkbox ${classNames}`}
@@ -18,7 +18,7 @@ const CheckBox = ({ label, checked, onChange = () => {}, classNames = '', dataTe
       data-testid={dataTestId}
     />
     {label}
-  </div>
+  </label>
 );
 
 export default CheckBox;
