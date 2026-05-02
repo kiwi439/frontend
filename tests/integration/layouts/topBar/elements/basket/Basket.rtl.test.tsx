@@ -79,14 +79,14 @@ describe('Basket', () => {
     fireEvent.mouseDown(screen.getByTestId('basket-icon'));
 
     await waitFor(() => {
-      expect(screen.getByText('Twój koszyk')).toBeInTheDocument();
+      expect(screen.getByText('Kontynuuj zakupy')).toBeInTheDocument();
     });
 
     const modalBackdrop = screen.getByRole('presentation');
     fireEvent.keyDown(modalBackdrop, { key: 'Escape', code: 'Escape' });
 
     await waitFor(() => {
-      expect(screen.queryByText('Twój koszyk')).not.toBeInTheDocument();
+      expect(screen.queryByText('Kontynuuj zakupy')).not.toBeInTheDocument();
     });
   });
 });

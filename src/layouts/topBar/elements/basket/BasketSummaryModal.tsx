@@ -29,7 +29,6 @@ const BasketSummaryModal = ({ open, handleOnClose }: BasketSummaryModalProps) =>
       id="basket-with-products-modal"
     >
       <div className={`${blockName}__content-wrapper`}>
-        <h1 className={`${blockName}__header`}>Twój koszyk</h1>
         {
           productsInBasket.map(({ id, attributes }, index) => (
             <Product
