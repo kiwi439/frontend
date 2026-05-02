@@ -1,5 +1,5 @@
 .main {
-  padding-top: 50px;
+  padding: $sections-default-padding;
 
   @import "products.scss";
   @import "opinions/main.scss";
