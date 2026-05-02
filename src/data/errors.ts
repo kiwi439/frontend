@@ -20,6 +20,5 @@ export const VALIDATION_ERROR_MESSAGES = {
 
 // TODO
 // 1. Uzywam innych kolorow do newsletter-a oraz innych rzeczy (rozne szare). Ten z newsletter-a chyba jest ladniejszy
-// 2. Data zakupu ma zle formatowanie 2.05.2026, 10:50:01 - brakuje 02
-// 3. Zamiast komponentu "Twoj koszyk jest pusty" mozna zrobic disabled basket i wyswietlic modal
-// 4. frontend/src/data/uiElements.ts - Czy ten plik ma sens?
+// 2. Zamiast komponentu "Twoj koszyk jest pusty" mozna zrobic disabled basket i wyswietlic modal
+// 3. frontend/src/data/uiElements.ts - Czy ten plik ma sens?

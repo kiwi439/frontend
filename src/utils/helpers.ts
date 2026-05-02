@@ -38,6 +38,16 @@ export const scrollIntoElement = (elementSelector: string) => {
 
 export const formatPrice = (price: number) => price.toFixed(2).toString().replace('.', ',');
 export const isTextLonger = (text: string, charsQuantity: number) => text.length > charsQuantity;
-export const formatTimestamp = (timeStamp: string) => new Date(timeStamp).toLocaleString();
+export const formatTimestamp = (timeStamp: string) => (
+  new Date(timeStamp).toLocaleString('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  })
+);
 export const validateByRegexp = (regexp: RegExp, subject: string) => regexp.test(subject);
 export const areTheSame = (val1: string, val2: string) => val1 === val2;
