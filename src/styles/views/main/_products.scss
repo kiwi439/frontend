@@ -3,15 +3,6 @@
   min-height: 400px;
   background-color: $white;
 
-  &__header {
-    font-size: 25px;
-    text-align: center;
-
-    @media screen and (min-width: $lg-breakpoint) {
-      font-size: 30px;
-    }
-  }
-
   &__list {
     display: flex;
     flex-wrap: wrap;

@@ -5,7 +5,6 @@ import { Categories } from 'types/category';
 import { GetProductsResponse } from 'types/product';
 import useScrollIntoElement from 'hooks/useScrollIntoElement';
 import { GET_PRODUCTS } from 'graphql/queries/products';
-import { generateHeaderCaption } from 'services/products';
 import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import Product from 'components/product/Product';
@@ -111,7 +110,7 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
     return renderProducts();
   };
 
-  useScrollIntoElement({ scrollDependency: location.key, elementSelector: `.${BLOCK_NAME}__header` });
+  useScrollIntoElement({ scrollDependency: location.key, elementSelector: `.${BLOCK_NAME}` });
 
   useEffect(() => {
     setActivePage(0);
@@ -131,9 +130,6 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
 
   return (
     <div className={`main__${BLOCK_NAME} ${BLOCK_NAME}`}>
-      <h2 className={`${BLOCK_NAME}__header`}>
-        {generateHeaderCaption(arePromoted, productType)}
-      </h2>
       {renderContent()}
     </div>
   );

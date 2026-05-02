@@ -1,4 +1,4 @@
-import { generateAddedProductPayload, generateHeaderCaption, generatePossibleProductQuantity } from 'services/products';
+import { generateAddedProductPayload, generatePossibleProductQuantity } from 'services/products';
 
 describe('generateAddedProductPayload', () => {
   test('should return proper object with properties', () => {
@@ -19,26 +19,6 @@ describe('generateAddedProductPayload', () => {
       quantity: 4,
       attributes: productAttributes
     });
-  });
-});
-
-describe('generateHeaderCaption', () => {
-  test('should return promoted products inscription', () => {
-    const response = generateHeaderCaption(true, null);
-
-    expect(response).toBe('Polecane produkty');
-  });
-
-  test('should return all products inscription', () => {
-    const response = generateHeaderCaption(false, null);
-
-    expect(response).toBe('Wszystkie produkty');
-  });
-
-  test('should return product from specific category inscription', () => {
-    const response = generateHeaderCaption(false, 'foundationZone');
-
-    expect(response).toBe('Produkty z kategori "Strefa fundamentu"');
   });
 });
 
