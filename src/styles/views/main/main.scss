@@ -1,4 +1,6 @@
 .main {
+  padding: $sections-default-padding;
+
   @import "products.scss";
   @import "opinions/main.scss";
   @import "register.scss";

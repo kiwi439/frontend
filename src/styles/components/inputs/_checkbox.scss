@@ -1,11 +1,45 @@
 .checkbox {
-  accent-color: $light-gray;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
   margin: $default-control-margin;
+  border: 1px solid rgba($black, 45%);
+  border-radius: 4px;
+  background-color: $white;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color $default-hover-animation-time, border-color $default-hover-animation-time;
+
+  &:checked {
+    border-color: $black;
+    background-color: $black;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+  }
 
   &__wrapper {
     flex-basis: 80%;
     display: flex;
+    align-items: center;
     justify-items: center;
     margin-bottom: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+
+    border: 1px solid rgba($black, 18%);
+    border-radius: $default-control-border-radious;
+    transition: border-color $default-hover-animation-time, background-color $default-hover-animation-time;
+
+    &:hover {
+      border-color: rgba($black, 35%);
+      background-color: rgba($black, 2%);
+    }
+
+    &:has(.checkbox:checked) {
+      border-color: $black;
+      background-color: rgba($black, 3%);
+    }
   }
 }

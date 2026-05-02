@@ -72,18 +72,27 @@
     &__table {
       width: 100%;
       margin: 0 auto;
-      border: 1px solid $black;
+      border: 1px solid $light-gray;
+      border-radius: $default-box-border-radious;
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
     }
 
     &__table-row {
       display: flex;
-      border: 1px solid $black;
     }
 
     &__table-col {
       @include flex-container;
-      border: 1px solid $black;
+      border-right: 1px solid $light-gray;
+      border-bottom: 1px solid $light-gray;
       padding: 5px;
+
+      &:last-child {
+        border-right: none;
+      }
 
       &:first-of-type {
         flex-basis: 35%;
@@ -99,30 +108,15 @@
 
       &--thead {
         font-weight: bold;
-        text-align: center;
-        border: none;
       }
 
       &--invoice-download {
+        transition: color $default-hover-animation-time;
+
         &:hover {
           cursor: pointer;
+          color: $gray;
         }
-      }
-    }
-
-    &__tooltip-wrapper {
-      @include flex-container;
-    }
-
-    &__tooltip-prompt {
-      margin-left: 5px;
-
-      @media screen and (min-width: $xs-breakpoint) {
-        margin-left: 10px;
-      }
-
-      &:hover {
-        cursor: pointer;
       }
     }
   }

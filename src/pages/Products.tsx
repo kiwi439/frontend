@@ -3,9 +3,7 @@ import { useSearchParams, useLocation } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { Categories } from 'types/category';
 import { GetProductsResponse } from 'types/product';
-import useScrollIntoElement from 'hooks/useScrollIntoElement';
 import { GET_PRODUCTS } from 'graphql/queries/products';
-import { generateHeaderCaption } from 'services/products';
 import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import Product from 'components/product/Product';
@@ -74,6 +72,10 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
     });
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
+
   const renderLoadingModal = () => (
     <LoadingModal isOpen={loading || !called} info="Trwa pobieranie produktów!" />
   );
@@ -111,7 +113,9 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
     return renderProducts();
   };
 
-  useScrollIntoElement({ scrollDependency: location.key, elementSelector: `.${BLOCK_NAME}__header` });
+  useEffect(() => {
+    scrollToTop();
+  }, [location.key]);
 
   useEffect(() => {
     setActivePage(0);
@@ -131,9 +135,6 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
 
   return (
     <div className={`main__${BLOCK_NAME} ${BLOCK_NAME}`}>
-      <h2 className={`${BLOCK_NAME}__header`}>
-        {generateHeaderCaption(arePromoted, productType)}
-      </h2>
       {renderContent()}
     </div>
   );

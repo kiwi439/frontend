@@ -92,11 +92,11 @@ describe('isTextLonger', () => {
 
 describe('formatTimestamp', () => {
   test('should format timestamp properly', () => {
-    // Replace if needed because problem with interprating whitespaces on various envs
-    const formattedTimestamp = formatTimestamp('2022-06-16 22:16:04').replace(/\s/g, '');
-    const expectedTimestamp = '6/16/2022, 10:16:04 PM'.replace(/\s/g, '');
+    expect(formatTimestamp('2022-06-16 22:16:04')).toBe('16.06.2022, 22:16:04');
+  });
 
-    expect(formattedTimestamp).toEqual(expectedTimestamp);
+  test('pads day and month with leading zeros', () => {
+    expect(formatTimestamp('2026-05-02T10:50:01')).toBe('02.05.2026, 10:50:01');
   });
 });
 

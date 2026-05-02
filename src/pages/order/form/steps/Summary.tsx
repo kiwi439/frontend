@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid';
 import { RootState } from 'types/store';
 import { clearBasket } from 'redux_/basket/actionCreators';
-import { countTotalPrice } from 'utils/helpers';
+import { countTotalPrice, formatPrice } from 'utils/helpers';
 import { ADD_ORDER } from 'graphql/mutations/order';
 import { generateAddOrderPayload } from 'services/orders';
 import LoadingModal from 'components/modals/LoadingModal';
@@ -31,9 +31,9 @@ const Summary = () => {
       <table className={`${blockName}__table`}>
         <thead className={`${blockName}__thead`}>
           <tr className={`${blockName}__row`}>
-            <th className={`${blockName}__col`}>Nazwa</th>
-            <th className={`${blockName}__col`}>Cena</th>
-            <th className={`${blockName}__col`}>Ilość</th>
+            <th className={`${blockName}__col ${blockName}__col--thead`}>Nazwa</th>
+            <th className={`${blockName}__col ${blockName}__col--thead`}>Cena</th>
+            <th className={`${blockName}__col ${blockName}__col--thead`}>Ilość</th>
           </tr>
         </thead>
         <tbody className={`${blockName}__tbody`}>
@@ -41,7 +41,7 @@ const Summary = () => {
             addedProducts.map(({ quantity, attributes: { name, price } }) => (
               <tr className={`${blockName}__row`} key={uuidv4()}>
                 <td className={`${blockName}__col`}>{name}</td>
-                <td className={`${blockName}__col`}>{price} zł</td>
+                <td className={`${blockName}__col`}>{formatPrice(price)} zł</td>
                 <td className={`${blockName}__col`}>{quantity}</td>
               </tr>
             ))
@@ -51,7 +51,7 @@ const Summary = () => {
               Suma całkowita
             </th>
             <td className={`${blockName}__col ${blockName}__col--price`}>
-              {countTotalPrice(addedProducts)} zł
+              {formatPrice(Number(countTotalPrice(addedProducts)))} zł
             </td>
           </tr>
         </tbody>

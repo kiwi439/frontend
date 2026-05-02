@@ -73,12 +73,14 @@ const AddOpinionForm = ({ setIsOpinionAdded, setIsAddedOpinionError, textareaRef
             validationError={opinionValidationError}
             dataTestId="opinion-textarea"
           />
-          <Rating
-            value={rating}
-            readOnly={false}
-            onChange={handleSetRating}
-            classes="rating--add-opinion"
-          />
+          <div className="rating__container">
+            <Rating
+              value={rating}
+              readOnly={false}
+              onChange={handleSetRating}
+              classes="rating"
+            />
+          </div>
           <SubmitButton
             onMouseDown={handleAddOpinionSubmit}
             value="Wyślij"

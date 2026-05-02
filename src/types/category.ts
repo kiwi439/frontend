@@ -1,3 +1,6 @@
-import { CATEGORY_NAMES } from 'data/uiElements';
-
-export type Categories = keyof typeof CATEGORY_NAMES;
+export type Categories =
+  | 'foundationZone'
+  | 'roofZone'
+  | 'constructionChemicals'
+  | 'stairway'
+  | 'tools';

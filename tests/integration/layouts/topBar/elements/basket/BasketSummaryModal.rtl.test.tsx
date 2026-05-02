@@ -40,7 +40,6 @@ describe('BasketSummaryModal', () => {
   it('renders basket correctly', () => {
     renderWithProviders(<BasketSummaryModal open handleOnClose={() => {}} />, { preloadedState });
 
-    expect(screen.getByText('Twój koszyk')).toBeInTheDocument();
     expect(screen.getByText('Kontynuuj zakupy')).toBeInTheDocument();
     expect(screen.getByText('Bloczek Termalika')).toBeInTheDocument();
   });

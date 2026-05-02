@@ -2,17 +2,47 @@
   width: 80%;
   margin: 0 auto;
 
+  &__label {
+    border-radius: $default-control-border-radious;
+    transition: background-color $default-hover-animation-time;
+    cursor: default;
+
+    &--completed {
+      cursor: pointer;
+
+      .MuiStepIcon-root {
+        color: $black !important;
+      }
+    }
+
+    &--active {
+      .MuiStepIcon-root {
+        color: $black !important;
+      }
+    }
+
+    &--upcoming {
+      .MuiStepIcon-root {
+        color: $white !important;
+        border: 1px solid $black;
+        border-radius: 50%;
+      }
+
+      .MuiStepIcon-text {
+        fill: $black;
+      }
+    }
+  }
+
   .MuiStepLabel-labelContainer {
+    color: $black;
+
     @media screen and (max-width: $xs-breakpoint) {
       display: none;
     }
   }
 
-  .MuiSvgIcon-root,
-  .MuiStepLabel-label {
-    &.Mui-active,
-    &.Mui-completed {
-      color: $gray;
-    }
+  .MuiStepConnector-line {
+    border-color: $black;
   }
 }

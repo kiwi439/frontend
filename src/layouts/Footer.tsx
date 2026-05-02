@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -10,11 +10,16 @@ import useFetchUrl from 'hooks/useFetchUrl';
 import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
 import { formatPhoneNumber } from 'utils/helpers';
 import { FOOTER_MENU_ROUTING } from 'data/routing';
-import { SHOP_RULES_TEXT, PRIVACY_POLICY_TEXT, SHOP_MAIL, SHOP_PHONE } from 'data/uiElements';
+import { SHOP_MAIL, SHOP_PHONE } from 'data/uiElements';
+
+const PRIVACY_POLICY_TEXT = 'Polityka prywatności – dokument umieszczany na witrynie internetowej w celu poinformowania użytkowników o tym, jakie dane osobowe są o nich zbierane i jak będą wykorzystywane.';
+const SHOP_RULES_TEXT = 'Regulamin sklepu internetowego to zbiór zasad i norm, regulujących procesy związane z dokonywanymi na stronie sklepu transakcjami. Również w regulaminie znajdziemy informację określające zasady komunikacji sklepu z klientem oraz odwrotnej możliwości. Często są tu zawarte również informacje o przesyłkach i płatnościach.';
 
 const Footer = () => {
   const blockName = 'footer';
   const logoURL = useFetchUrl({ key: 'images/logo.svg' });
+  const { pathname, search } = useLocation();
+  const activeProductType = pathname === '/products' ? new URLSearchParams(search).get('type') : null;
 
   const [privacyPolicyTooltipOpen, setPrivacyPolicyTooltipOpen] = useState(false);
   const [shopRulesTooltipOpen, setShopRulesTooltipOpen] = useState(false);
@@ -99,10 +104,11 @@ const Footer = () => {
           }
         >
           {
-            FOOTER_MENU_ROUTING.map(({ name, path }) => (
+            FOOTER_MENU_ROUTING.map(({ name, type }) => (
               <div className={`${blockName}__product-cathegory`} key={`${blockName}-product-cathegory-${name}`}>
-                <Link to={path}>
-                  <span className={`${blockName}__content-element`}>
+                <Link to={`/products?type=${type}`}>
+                  <span className={`${blockName}__content-element
+                                    ${activeProductType === type ? `${blockName}__content-element--active` : ''}`}>
                     {name}
                   </span>
                 </Link>

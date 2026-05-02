@@ -6,11 +6,9 @@ import { GetOrdersResponse, Order } from 'types/orders';
 import { GET_ORDERS } from 'graphql/queries/order';
 import { formatTimestamp } from 'utils/helpers';
 import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import Pagination from 'components/Pagination';
-import Tooltip from 'components/Tooltip';
 
 const History = () => {
   const blockName = 'history';
@@ -19,7 +17,6 @@ const History = () => {
   const [activePage, setActivePage] = useState(0);
   const [cursors, setCursors] = useState<(string | null)[]>([]);
   const [ordersResponse, setOrdersResponse] = useState<GetOrdersResponse['orders'] | null>(null);
-  const [downloadInvoiceTooltipOpen, setDownloadInvoiceTooltipOpen] = useState(false);
   const [fetchingOrdersError, setFetchingOrdersError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -74,18 +71,6 @@ const History = () => {
                 <tr className={`${blockName}__table-row`}>
                   <td className={`${blockName}__table-col ${blockName}__table-col--thead`}>
                     Numer zamówienia
-                    <div
-                      className={`${blockName}__tooltip-wrapper`}
-                      onMouseEnter={() => setDownloadInvoiceTooltipOpen(true)}
-                      onMouseLeave={() => setDownloadInvoiceTooltipOpen(false)}
-                    >
-                      <Tooltip
-                        open={downloadInvoiceTooltipOpen}
-                        headerText="Pobierz fakturę!"
-                      >
-                        <LiveHelpIcon className={`${blockName}__tooltip-prompt`} />
-                      </Tooltip>
-                    </div>
                   </td>
                   <td className={`${blockName}__table-col ${blockName}__table-col--thead`}>Cena całkowita</td>
                   <td className={`${blockName}__table-col ${blockName}__table-col--thead`}>Data zakupu</td>
