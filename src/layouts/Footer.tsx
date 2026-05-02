@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -15,6 +15,8 @@ import { SHOP_RULES_TEXT, PRIVACY_POLICY_TEXT, SHOP_MAIL, SHOP_PHONE } from 'dat
 const Footer = () => {
   const blockName = 'footer';
   const logoURL = useFetchUrl({ key: 'images/logo.svg' });
+  const { pathname, search } = useLocation();
+  const activeProductType = pathname === '/products' ? new URLSearchParams(search).get('type') : null;
 
   const [privacyPolicyTooltipOpen, setPrivacyPolicyTooltipOpen] = useState(false);
   const [shopRulesTooltipOpen, setShopRulesTooltipOpen] = useState(false);
@@ -99,10 +101,11 @@ const Footer = () => {
           }
         >
           {
-            FOOTER_MENU_ROUTING.map(({ name, path }) => (
+            FOOTER_MENU_ROUTING.map(({ name, type }) => (
               <div className={`${blockName}__product-cathegory`} key={`${blockName}-product-cathegory-${name}`}>
-                <Link to={path}>
-                  <span className={`${blockName}__content-element`}>
+                <Link to={`/products?type=${type}`}>
+                  <span className={`${blockName}__content-element
+                                    ${activeProductType === type ? `${blockName}__content-element--active` : ''}`}>
                     {name}
                   </span>
                 </Link>
