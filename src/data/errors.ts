@@ -17,6 +17,3 @@ export const VALIDATION_ERROR_MESSAGES = {
   postalCode: 'Kod pocztowy ma niepoprawny format!',
   phone: 'Telefon ma niepoprawny format!'
 };
-
-// TODO
-// 2. Zamiast komponentu "Twoj koszyk jest pusty" mozna zrobic disabled basket i wyswietlic modal
