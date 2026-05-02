@@ -1,8 +1,4 @@
 .thank-you-page {
-  &__form-container {
-    padding: 35px 0;
-  }
-
   .form-container__header {
     margin-bottom: 14px;
     line-height: 1.2;
@@ -55,6 +51,14 @@
     font-weight: 600;
     text-align: right;
     overflow-wrap: anywhere;
+
+    &--status-ok {
+      color: $green;
+    }
+
+    &--status-error {
+      color: $red;
+    }
 
     &--contact {
       display: block;

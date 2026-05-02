@@ -54,7 +54,7 @@ const ThankYouPage = () => {
       const paymentProviderLabel = latestPayment.provider.toUpperCase();
       const paymentStatusLabel = PAYMENT_STATUS_LABELS[latestPayment.status];
       const paymentAmountLabel = `${(latestPayment.amountCents / 100).toFixed(2)} zł`;
-  
+
       return (
         <div className={`${blockName}__payment-details`}>
           <div className={`${blockName}__payment-row`}>
@@ -63,7 +63,10 @@ const ThankYouPage = () => {
           </div>
           <div className={`${blockName}__payment-row`}>
             <span className={`${blockName}__payment-label`}>Status</span>
-            <span className={`${blockName}__payment-value`}>{paymentStatusLabel}</span>
+            <span className={`${blockName}__payment-value
+                              ${data!.order.paid ? `${blockName}__payment-value--status-ok` : `${blockName}__payment-value--status-error`}`}>
+              {paymentStatusLabel}
+            </span>
           </div>
           <div className={`${blockName}__payment-row`}>
             <span className={`${blockName}__payment-label`}>Kwota</span>
