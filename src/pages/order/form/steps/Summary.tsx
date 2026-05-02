@@ -31,9 +31,9 @@ const Summary = () => {
       <table className={`${blockName}__table`}>
         <thead className={`${blockName}__thead`}>
           <tr className={`${blockName}__row`}>
-            <th className={`${blockName}__col`}>Nazwa</th>
-            <th className={`${blockName}__col`}>Cena</th>
-            <th className={`${blockName}__col`}>Ilość</th>
+            <th className={`${blockName}__col ${blockName}__col--thead`}>Nazwa</th>
+            <th className={`${blockName}__col ${blockName}__col--thead`}>Cena</th>
+            <th className={`${blockName}__col ${blockName}__col--thead`}>Ilość</th>
           </tr>
         </thead>
         <tbody className={`${blockName}__tbody`}>

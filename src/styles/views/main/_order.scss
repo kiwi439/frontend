@@ -29,38 +29,55 @@
     min-height: 200px;
 
     &__table {
-      width: 100%;
       display: flex;
+      flex-direction: column;
       box-sizing: border-box;
-      flex-wrap: wrap;
       margin-bottom: 30px;
+      border: 1px solid $light-gray;
       border-radius: $default-box-border-radious;
     }
 
     &__thead,
     &__tbody {
-      flex-basis: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     &__row {
-      flex-basis: 100%;
       display: flex;
+      width: 100%;
     }
 
     &__col {
-      flex-basis: 33.3%;
+      @include flex-container($justify-content: flex-start);
+      flex-basis: 33.333%;
       padding: 5px;
-      text-align: start;
-      border: .5px solid $black;
+      border-right: 1px solid $light-gray;
+      border-bottom: 1px solid $light-gray;
+
+      &:last-child {
+        border-right: none;
+      }
 
       &--sum-label {
         flex-basis: 66.6%;
+        font-weight: bold;
       }
 
       &--price {
         flex-basis: 33.3%;
         font-weight: bold;
       }
+
+      &--thead {
+        @include flex-container($justify-content: center);
+        text-align: center;
+        font-weight: bold;
+      }
+    }
+
+    &__tbody &__row:last-child &__col {
+      border-bottom: none;
     }
   }
 }
