@@ -1,11 +1,19 @@
 import { Products } from 'types/product';
+import { DELIVERY_METHODS_CONFIGURATION, DeliveryMethods } from 'data/deliveryMethods';
 
-export const countTotalPrice = (products: Products) => {
+export const countProductsTotalPrice = (products: Products) => {
   const initialValue = 0;
 
   return products.reduce((prev, { quantity, attributes: { price } }) => (
     (quantity * price) + prev
-  ), initialValue).toFixed(2);
+  ), initialValue);
+};
+
+export const countOrderTotalPrice = (products: Products, deliveryMethod: DeliveryMethods) => {
+  const productsPrice = countProductsTotalPrice(products);
+  const deliveryPrice = DELIVERY_METHODS_CONFIGURATION[deliveryMethod].price;
+
+  return (productsPrice + deliveryPrice);
 };
 
 export const formatPhoneNumber = (phoneNumber: string) => {

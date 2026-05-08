@@ -4,7 +4,8 @@ import { useMutation } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid';
 import { RootState } from 'types/store';
 import { clearBasket } from 'redux_/basket/actionCreators';
-import { countTotalPrice, formatPrice } from 'utils/helpers';
+import { countOrderTotalPrice, formatPrice } from 'utils/helpers';
+import { DELIVERY_METHODS_CONFIGURATION, DeliveryMethods } from 'data/deliveryMethods';
 import { ADD_ORDER } from 'graphql/mutations/order';
 import { generateAddOrderPayload } from 'services/orders';
 import LoadingModal from 'components/modals/LoadingModal';
@@ -15,6 +16,7 @@ const Summary = () => {
   const blockName = 'summary';
   const dispatch = useDispatch();
   const { addedProducts } = useSelector((store: RootState) => store.basket);
+  const deliveryMethod = useSelector((store: RootState) => store.order.deliveryMethod) as DeliveryMethods;
   const [orderError, setOrderError] = useState(false);
 
   const [addOrder, { loading }] = useMutation(ADD_ORDER, {
@@ -47,11 +49,16 @@ const Summary = () => {
             ))
           }
           <tr className={`${blockName}__row`}>
+            <td className={`${blockName}__col`}>{`Dostawa: ${DELIVERY_METHODS_CONFIGURATION[deliveryMethod].label}`}</td>
+            <td className={`${blockName}__col`}>{formatPrice(DELIVERY_METHODS_CONFIGURATION[deliveryMethod].price)} zł</td>
+            <td className={`${blockName}__col`}>1</td>
+          </tr>
+          <tr className={`${blockName}__row`}>
             <th className={`${blockName}__col ${blockName}__col--sum-label`}>
               Suma całkowita
             </th>
             <td className={`${blockName}__col ${blockName}__col--price`}>
-              {formatPrice(Number(countTotalPrice(addedProducts)))} zł
+              {formatPrice(countOrderTotalPrice(addedProducts, deliveryMethod))} zł
             </td>
           </tr>
         </tbody>

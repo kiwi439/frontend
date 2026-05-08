@@ -6,7 +6,7 @@ import { setName, setSurname, setStreet, setCity, setPostalCode, setEmail, setPh
 const persistConfig = { key: 'order', storage };
 const initialState = {
   clientDetails: { name: '', surname: '', street: '', city: '', postalCode: '', email: '', phoneNumber: '' },
-  delivery: { inPost: true, dpd: false, pickUpAtThePoint: false },
+  deliveryMethod: 'in_post',
   payment: { stripePayment: true }
 };
 
@@ -33,10 +33,8 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(setPhoneNumber, (state, { payload }) => {
       state.clientDetails.phoneNumber = payload;
     })
-    .addCase(setDeliveryMethod, (state, { payload: { inPost, dpd, pickUpAtThePoint } }) => {
-      state.delivery.inPost = inPost;
-      state.delivery.dpd = dpd;
-      state.delivery.pickUpAtThePoint = pickUpAtThePoint;
+    .addCase(setDeliveryMethod, (state, { payload }) => {
+      state.deliveryMethod = payload;
     });
 });
 
