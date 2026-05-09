@@ -3,8 +3,8 @@ import { OrderContext } from 'contexts/contexts';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'types/store';
 import { setDeliveryMethod } from 'redux_/order/actionsCreator';
-import { DELIVERY_METHODS_CONFIGURATION } from 'data/deliveryMethods';
-import { formatPrice } from 'utils/helpers';
+import { DELIVERY_METHODS_CONFIGURATION, type DeliveryMethodConfig } from 'data/deliveryMethods';
+import { formatPrice, calculateGrossPrice } from 'utils/pricing';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ApprovalIcon from '@mui/icons-material/Approval';
@@ -23,6 +23,12 @@ const DeliveryMethod = () => {
 
   const handleSubmitOnMouseDown = () => setStep(2);
 
+  const generateDeliveryOptionLabel = (option: DeliveryMethodConfig) => {
+    const price = calculateGrossPrice(option.price, option.vatRate);
+
+    return `${option.label} (${formatPrice(price)} zł)`;
+  };
+
   return (
     <div className={`order__form-part-container ${blockName}`}>
       <CheckBox
@@ -32,7 +38,7 @@ const DeliveryMethod = () => {
           <Fragment>
             <LocalShippingIcon className={`${blockName}__icon ${blockName}__icon--inpost`} />
             <span className={`${blockName}__icon-label`}>
-              {`${DELIVERY_METHODS_CONFIGURATION.in_post.label} (${formatPrice(DELIVERY_METHODS_CONFIGURATION.in_post.price)} zł)`}
+              {generateDeliveryOptionLabel(DELIVERY_METHODS_CONFIGURATION.in_post)}
             </span>
           </Fragment>
         )}
@@ -45,7 +51,7 @@ const DeliveryMethod = () => {
           <Fragment>
             <PostAddIcon className={`${blockName}__icon`} />
             <span className={`${blockName}__icon-label`}>
-              {`${DELIVERY_METHODS_CONFIGURATION.dpd.label} (${formatPrice(DELIVERY_METHODS_CONFIGURATION.dpd.price)} zł)`}
+              {generateDeliveryOptionLabel(DELIVERY_METHODS_CONFIGURATION.dpd)}
             </span>
           </Fragment>
         )}
@@ -58,7 +64,7 @@ const DeliveryMethod = () => {
           <Fragment>
             <ApprovalIcon className={`${blockName}__icon`} />
             <span className={`${blockName}__icon-label`}>
-              {`${DELIVERY_METHODS_CONFIGURATION.pick_up_at_the_point.label} (${formatPrice(DELIVERY_METHODS_CONFIGURATION.pick_up_at_the_point.price)} zł)`}
+              {generateDeliveryOptionLabel(DELIVERY_METHODS_CONFIGURATION.pick_up_at_the_point)}
             </span>
           </Fragment>
         )}

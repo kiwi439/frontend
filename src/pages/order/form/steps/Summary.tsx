@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid';
 import { RootState } from 'types/store';
 import { clearBasket } from 'redux_/basket/actionCreators';
-import { countOrderTotalPrice, formatPrice } from 'utils/helpers';
+import { calculateOrderTotalPrice, formatPrice, calculateGrossPrice } from 'utils/pricing';
 import { DELIVERY_METHODS_CONFIGURATION, DeliveryMethods } from 'data/deliveryMethods';
 import { ADD_ORDER } from 'graphql/mutations/order';
 import { generateAddOrderPayload } from 'services/orders';
@@ -18,6 +18,14 @@ const Summary = () => {
   const { addedProducts } = useSelector((store: RootState) => store.basket);
   const deliveryMethod = useSelector((store: RootState) => store.order.deliveryMethod) as DeliveryMethods;
   const [orderError, setOrderError] = useState(false);
+
+  const selectedDelivery = DELIVERY_METHODS_CONFIGURATION[deliveryMethod];
+
+  const calculateDeliveryVatAmount = (): number => {
+    const grossPrice = calculateGrossPrice(selectedDelivery.price, selectedDelivery.vatRate);
+
+    return grossPrice - selectedDelivery.price;
+  };
 
   const [addOrder, { loading }] = useMutation(ADD_ORDER, {
     variables: { input: generateAddOrderPayload() },
@@ -33,32 +41,46 @@ const Summary = () => {
       <table className={`${blockName}__table`}>
         <thead className={`${blockName}__thead`}>
           <tr className={`${blockName}__row`}>
-            <th className={`${blockName}__col ${blockName}__col--thead`}>Nazwa</th>
-            <th className={`${blockName}__col ${blockName}__col--thead`}>Cena</th>
-            <th className={`${blockName}__col ${blockName}__col--thead`}>Ilość</th>
+            <th className={`${blockName}__col ${blockName}__col--thead ${blockName}__col--name`}>Nazwa</th>
+            <th className={`${blockName}__col ${blockName}__col--thead ${blockName}__col--net-price`}>Cena netto</th>
+            <th className={`${blockName}__col ${blockName}__col--thead ${blockName}__col--vat`}>VAT</th>
+            <th className={`${blockName}__col ${blockName}__col--thead ${blockName}__col--quantity`}>Ilość</th>
           </tr>
         </thead>
         <tbody className={`${blockName}__tbody`}>
           {
-            addedProducts.map(({ quantity, attributes: { name, price } }) => (
-              <tr className={`${blockName}__row`} key={uuidv4()}>
-                <td className={`${blockName}__col`}>{name}</td>
-                <td className={`${blockName}__col`}>{formatPrice(price)} zł</td>
-                <td className={`${blockName}__col`}>{quantity}</td>
-              </tr>
-            ))
+            addedProducts.map(({ quantity, attributes }) => {
+              const { name, price: unitProductNettoPrice, vatRate } = attributes;
+              const unitProductGrossPrice = calculateGrossPrice(unitProductNettoPrice, vatRate);
+              const productLineNettoPrice = unitProductNettoPrice * quantity;
+              const productLineGrossPrice = unitProductGrossPrice * quantity;
+
+              return (
+                <tr className={`${blockName}__row`} key={uuidv4()}>
+                  <td className={`${blockName}__col ${blockName}__col--name`}>{name}</td>
+                  <td className={`${blockName}__col ${blockName}__col--net-price`}>{formatPrice(unitProductNettoPrice)} zł</td>
+                  <td className={`${blockName}__col ${blockName}__col--vat`}>{formatPrice(productLineGrossPrice - productLineNettoPrice)} zł</td>
+                  <td className={`${blockName}__col ${blockName}__col--quantity`}>{quantity}</td>
+                </tr>
+              );
+            })
           }
           <tr className={`${blockName}__row`}>
-            <td className={`${blockName}__col`}>{`Dostawa: ${DELIVERY_METHODS_CONFIGURATION[deliveryMethod].label}`}</td>
-            <td className={`${blockName}__col`}>{formatPrice(DELIVERY_METHODS_CONFIGURATION[deliveryMethod].price)} zł</td>
-            <td className={`${blockName}__col`}>1</td>
+            <td className={`${blockName}__col ${blockName}__col--name`}>{`Dostawa: ${selectedDelivery.label}`}</td>
+            <td className={`${blockName}__col ${blockName}__col--net-price`}>
+              {formatPrice(selectedDelivery.price)} zł
+            </td>
+            <td className={`${blockName}__col ${blockName}__col--vat`}>
+              {formatPrice(calculateDeliveryVatAmount())} zł
+            </td>
+            <td className={`${blockName}__col ${blockName}__col--quantity`}>1</td>
           </tr>
-          <tr className={`${blockName}__row`}>
-            <th className={`${blockName}__col ${blockName}__col--sum-label`}>
-              Suma całkowita
-            </th>
-            <td className={`${blockName}__col ${blockName}__col--price`}>
-              {formatPrice(countOrderTotalPrice(addedProducts, deliveryMethod))} zł
+          <tr className={`${blockName}__row ${blockName}__row--pay-total`}>
+            <td className={`${blockName}__col ${blockName}__col--pay-total-cell`}>
+              <span className={`${blockName}__pay-total-label`}>Razem do zapłaty:</span>
+              <span className={`${blockName}__pay-total-value`}>
+                {formatPrice(calculateOrderTotalPrice(addedProducts, selectedDelivery))} zł
+              </span>
             </td>
           </tr>
         </tbody>

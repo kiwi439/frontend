@@ -12,6 +12,7 @@ export type Product = DeepReadonly<{
     pictureBucket: string,
     pictureKey: string,
     price: number,
+    vatRate: number,
     __typename: string
   }
 }>

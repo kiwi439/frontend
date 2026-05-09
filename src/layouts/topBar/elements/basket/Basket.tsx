@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'types/store';
 import { isEmpty } from 'lodash';
-import { countProductsTotalPrice, formatPrice } from 'utils/helpers';
+import { calculateProductsTotalPrice, formatPrice } from 'utils/pricing';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import EmptyBasketModal from 'layouts/topBar/elements/basket/EmptyBasketModal';
 import BasketSummaryModal from 'layouts/topBar/elements/basket/BasketSummaryModal';
@@ -23,7 +23,7 @@ const Basket = () => {
   return (
     <div className={`${blockName}__basket`}>
       <span className={`${blockName}__basket-price`}>
-        {formatPrice(countProductsTotalPrice(productsInBasket))} zł
+        {formatPrice(calculateProductsTotalPrice(productsInBasket))} zł
       </span>
       <ShoppingBasketIcon
         className={`${blockName}__basket-icon`}
