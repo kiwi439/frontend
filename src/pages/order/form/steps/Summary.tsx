@@ -52,14 +52,13 @@ const Summary = () => {
             addedProducts.map(({ quantity, attributes }) => {
               const { name, price: unitProductNettoPrice, vatRate } = attributes;
               const unitProductGrossPrice = calculateGrossPrice(unitProductNettoPrice, vatRate);
-              const productLineNettoPrice = unitProductNettoPrice * quantity;
-              const productLineGrossPrice = unitProductGrossPrice * quantity;
+              const unitProductVatAmount = unitProductGrossPrice - unitProductNettoPrice;
 
               return (
                 <tr className={`${blockName}__row`} key={uuidv4()}>
                   <td className={`${blockName}__col ${blockName}__col--name`}>{name}</td>
                   <td className={`${blockName}__col ${blockName}__col--net-price`}>{formatPrice(unitProductNettoPrice)} zł</td>
-                  <td className={`${blockName}__col ${blockName}__col--vat`}>{formatPrice(productLineGrossPrice - productLineNettoPrice)} zł</td>
+                  <td className={`${blockName}__col ${blockName}__col--vat`}>{formatPrice(unitProductVatAmount)} zł</td>
                   <td className={`${blockName}__col ${blockName}__col--quantity`}>{quantity}</td>
                 </tr>
               );
