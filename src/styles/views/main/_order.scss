@@ -103,6 +103,7 @@
         flex-basis: 100%;
         flex-wrap: nowrap;
         gap: 0.5rem;
+        border-bottom: none;
       }
     }
 
@@ -112,10 +113,6 @@
 
     &__pay-total-value {
       white-space: nowrap;
-    }
-
-    &__tbody &__row:last-child &__col {
-      border-bottom: none;
     }
   }
 }
