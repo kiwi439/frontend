@@ -1,11 +1,12 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'types/store';
-import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
+import { saveFileFromBase64 } from 'services/downloadFile';
 import SubmitButton from 'components/SubmitButton';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_ORDER } from 'graphql/queries/order';
+import { GET_INVOICE_PDF } from 'graphql/queries/invoice';
 import useRedirect from 'hooks/useRedirect';
 import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
@@ -32,6 +33,13 @@ const ThankYouPage = () => {
   const { data, loading, error, startPolling, stopPolling } = useQuery(GET_ORDER, {
     variables: { id: orderID },
     fetchPolicy: 'network-only',
+  });
+
+  const [fetchInvoice, { loading: fetchingInvoice }] = useLazyQuery(GET_INVOICE_PDF, {
+    fetchPolicy: 'network-only',
+    onCompleted: (response) => {
+      saveFileFromBase64(response.invoicePdf.pdfBase64, `Faktura za zamówienie: ${orderID}.pdf`);
+    },
   });
 
   const paymentStatus = data?.order?.latestPayment?.status;
@@ -96,33 +104,29 @@ const ThankYouPage = () => {
       );
     };
 
-    const renderPaymentSuccess = (): ReactElement => {
-      const downloadInvoice = () => {
-        const key = `users/${loggedUserId}/invoices/${orderID}.pdf`;
-        const fileName = `Faktura za zamówienie: ${orderID}`;
-        fetchFileOnLocalFileSystem(key, fileName);
-      };
-  
-      return (
-        <div className={blockName}>
-          <FormContainer
-            classNames={`${blockName}__form-container`}
-            header="Dziękujemy za dokonanie zakupu!"
-            form={(
-              <>
-                <p className={`${blockName}__payment-summary`}>Płatność została opłacona.</p>
-                {renderPaymentDetails()}
-                <SubmitButton
-                  value="Pobierz fakturę w formacie PDF"
-                  classNames={`${blockName}__download-invoice-button`}
-                  onMouseDown={downloadInvoice}
-                />
-              </>
-            )}
-          />
-        </div>
-      );
-    };
+    const renderPaymentSuccess = (): ReactElement => (
+      <div className={blockName}>
+        <FormContainer
+          classNames={`${blockName}__form-container`}
+          header="Dziękujemy za dokonanie zakupu!"
+          form={(
+            <>
+              <p className={`${blockName}__payment-summary`}>Płatność została opłacona.</p>
+              {renderPaymentDetails()}
+              <SubmitButton
+                value={fetchingInvoice ? 'Pobieranie faktury…' : 'Pobierz fakturę w formacie PDF'}
+                classNames={`${blockName}__download-invoice-button`}
+                onMouseDown={() => {
+                  if (fetchingInvoice) return;
+
+                  fetchInvoice({ variables: { orderId: orderID } });
+                }}
+              />
+            </>
+          )}
+        />
+      </div>
+    );
   
     const renderPaymentFailure = (): ReactElement => (
       <div className={blockName}>
