@@ -151,12 +151,12 @@ const MyDetails = () => {
       <ErrorModal
         isOpen={updateUserDetailsError}
         handleOnClose={() => setUpdateUserDetailsError(false)}
-        info="Niestety nie udało się zaktualizować danych osobowych!"
+        body={<p>Niestety nie udało się zaktualizować danych osobowych!</p>}
       />
       <ErrorModal
         isOpen={getPersonalDetailsDataError}
         handleOnClose={() => setGetPersonalDetailsDataError(false)}
-        info="Niestety nie udało się pobrać danych osobowych!"
+        body={<p>Niestety nie udało się pobrać danych osobowych!</p>}
       />
     </div>
   );

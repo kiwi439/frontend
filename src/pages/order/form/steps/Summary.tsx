@@ -96,7 +96,7 @@ const Summary = () => {
       <ErrorModal
         isOpen={orderError}
         handleOnClose={() => setOrderError(false)}
-        info="Niestety nie udało się złożyć zamówienia."
+        body={<p>Niestety nie udało się złożyć zamówienia.</p>}
       />
     </div>
   );

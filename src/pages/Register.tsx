@@ -142,7 +142,7 @@ const Register = () => {
       <ErrorModal
         isOpen={registerUserError}
         handleOnClose={() => setRegisterUserError(false)}
-        info={registerUserErrorMesage}
+        body={<p>{registerUserErrorMesage}</p>}
       />
     </div>
   );

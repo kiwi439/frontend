@@ -83,7 +83,7 @@ const ChangePassword = () => {
       <ErrorModal
         isOpen={changePasswordError}
         handleOnClose={() => setChangePasswordError(false)}
-        info="Niestety nie udało się zmienić hasła."
+        body={<p>Niestety nie udało się zmienić hasła.</p>}
       />
     </div>
   );

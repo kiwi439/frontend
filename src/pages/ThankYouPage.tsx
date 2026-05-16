@@ -43,8 +43,8 @@ const ThankYouPage = () => {
   const renderErrorModal = (): ReactElement => (
     <ErrorModal
       isOpen
-      info='Wystąpił błąd podczas pobierania zamówienia.'
       handleOnClose={() => navigate('/')}
+      body={<p>Wystąpił błąd podczas pobierania zamówienia.</p>}
     />
   );
 

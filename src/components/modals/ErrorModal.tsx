@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Modal } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 
-type ErrorModalProps = { isOpen: boolean, info: string, handleOnClose: () => void };
+type ErrorModalProps = { isOpen: boolean, body: ReactNode, handleOnClose: () => void };
 
-const ErrorModal = ({ isOpen, handleOnClose, info }: ErrorModalProps) => {
+const ErrorModal = ({ isOpen, handleOnClose, body }: ErrorModalProps) => {
   const blockName = 'modal';
 
   return (
@@ -16,10 +16,8 @@ const ErrorModal = ({ isOpen, handleOnClose, info }: ErrorModalProps) => {
       <div className={`${blockName}__content-wrapper`}>
         <ErrorIcon className={`${blockName}__error-icon`} />
         <h2 className={`${blockName}__header`}>Wystąpił niespodziewany problem!</h2>
-        <div className={`${blockName}__info`}>
-          <p>{info}</p>
-          <p>Za utrudnienia przepraszamy</p>
-        </div>
+        <p>Za utrudnienia przepraszamy</p>
+        {body}
       </div>
     </Modal>
   );

@@ -102,7 +102,7 @@ const Opinions = () => {
       <ErrorModal
         isOpen={isAddedOpinionError}
         handleOnClose={() => setIsAddedOpinionError(false)}
-        info="Niestety nie udało się dodać nowej opini."
+        body={<p>Niestety nie udało się dodać nowej opini.</p>}
       />
     </div>
   );

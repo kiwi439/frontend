@@ -46,7 +46,7 @@ const RemoveAccount = () => {
       <ErrorModal
         isOpen={removingAccountError}
         handleOnClose={() => setRemovingAccountError(false)}
-        info="Niestety nie udało się usunąć konta!"
+        body={<p>Niestety nie udało się usunąć konta!</p>}
       />
       <SuccessModal
         isOpen={removingAccountSuccess}

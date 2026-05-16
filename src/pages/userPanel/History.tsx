@@ -5,7 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import { GetOrdersResponse, Order } from 'types/orders';
 import { GET_ORDERS } from 'graphql/queries/order';
 import { formatTimestamp } from 'utils/helpers';
-import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
+import { saveFileFromS3 } from 'services/downloadFile';
 import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import Pagination from 'components/Pagination';
@@ -52,7 +52,7 @@ const History = () => {
     const key = `users/${loggedUserId}/invoices/${orderID}.pdf`;
     const fileName = `Faktura za zamówienie: ${orderID}`;
 
-    fetchFileOnLocalFileSystem(key, fileName);
+    saveFileFromS3(key, fileName);
   };
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const History = () => {
         <ErrorModal
           isOpen={fetchingOrdersError}
           handleOnClose={() => setFetchingOrdersError(false)}
-          info="Niestety nie udało się pobrać historii twoich zamówień."
+          body={<p>Niestety nie udało się pobrać historii twoich zamówień.</p>}
         />
     </div>
   );
