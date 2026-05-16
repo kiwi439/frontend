@@ -102,7 +102,7 @@
         @include flex-container($justify-content: flex-start, $align-items: baseline);
         flex-basis: 100%;
         flex-wrap: nowrap;
-        gap: 0.5rem;
+        gap: .5rem;
         border-bottom: none;
       }
     }
