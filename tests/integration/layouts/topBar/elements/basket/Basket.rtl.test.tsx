@@ -17,6 +17,7 @@ describe('Basket', () => {
               id: 'da97aa73-f0e4-4a17-9157-9f17454c73f3',
               name: 'Bloczek Termalika',
               price: 124.99,
+              vatRate: 23,
               availableQuantity: 1000,
               pictureKey: 'images/products/foundation_materials/bloczke_termalika.jpeg',
               pictureBucket: 'budoman-development',
@@ -29,7 +30,7 @@ describe('Basket', () => {
 
     renderWithProviders(<Basket />, { preloadedState });
 
-    expect(screen.getByText('374.97 zł')).toBeInTheDocument();
+    expect(screen.getByText(/461,22/)).toBeInTheDocument();
     expect(screen.getByTestId('basket-icon')).toBeInTheDocument();
     expect(screen.queryByText('Twój koszyk jest pusty!')).not.toBeInTheDocument();
     expect(screen.queryByText('Twój koszyk')).not.toBeInTheDocument();
@@ -64,6 +65,7 @@ describe('Basket', () => {
               id: 'da97aa73-f0e4-4a17-9157-9f17454c73f3',
               name: 'Bloczek Termalika',
               price: 124.99,
+              vatRate: 23,
               availableQuantity: 1000,
               pictureKey: 'images/products/foundation_materials/bloczke_termalika.jpeg',
               pictureBucket: 'budoman-development',

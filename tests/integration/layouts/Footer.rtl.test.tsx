@@ -3,9 +3,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Footer from 'layouts/Footer.tsx';
-import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem.ts';
+import { saveFileFromS3 } from 'services/downloadFile';
 
-jest.mock('services/fetchFileOnLocalFileSystem', () => jest.fn());
+jest.mock('services/downloadFile', () => ({
+  saveFileFromBase64: jest.fn(),
+  saveFileFromS3: jest.fn(),
+}));
 
 describe('Footer', () => {
   const renderFooter = () => {
@@ -73,7 +76,7 @@ describe('Footer', () => {
 
     fireEvent.mouseDown(screen.getByText('Polityka prywatności'));
 
-    expect(fetchFileOnLocalFileSystem).toHaveBeenCalledWith('documents/polityka_prywatnosci.pdf', 'Polityka prywatności.pdf');
+    expect(saveFileFromS3).toHaveBeenCalledWith('documents/polityka_prywatnosci.pdf', 'Polityka prywatności.pdf');
   });
 
   it("fetches shop rules document after click in 'Regulamin sklepu'", () => {
@@ -81,7 +84,7 @@ describe('Footer', () => {
 
     fireEvent.mouseDown(screen.getByText('Regulamin sklepu'));
 
-    expect(fetchFileOnLocalFileSystem).toHaveBeenCalledWith('documents/regulamin_sklepu.pdf', 'Regulamin sklepu.pdf');
+    expect(saveFileFromS3).toHaveBeenCalledWith('documents/regulamin_sklepu.pdf', 'Regulamin sklepu.pdf');
   });
 
   it('shows and hides privacy policy tooltip', async () => {

@@ -3,10 +3,14 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import renderWithProviders from 'tests/integration/helpers/renderWithProviders';
 import { generatePreloadedState } from 'tests/integration/helpers/preloadedState';
 import { GET_ORDER } from 'graphql/queries/order';
+import { GET_INVOICE_PDF } from 'graphql/queries/invoice';
 import ThankYouPage from 'pages/ThankYouPage';
-import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
+import { saveFileFromBase64 } from 'services/downloadFile';
 
-jest.mock('services/fetchFileOnLocalFileSystem', () => jest.fn());
+jest.mock('services/downloadFile', () => ({
+  saveFileFromBase64: jest.fn(),
+  saveFileFromS3: jest.fn(),
+}));
 
 describe('ThankYouPage', () => {
   const orderId = 'da97aa73-f0e4-4a17-9157-9f17454c73f3';
@@ -37,6 +41,19 @@ describe('ThankYouPage', () => {
               }
             }
           }
+        },
+        {
+          request: {
+            query: GET_INVOICE_PDF,
+            variables: { orderId }
+          },
+          result: {
+            data: {
+              invoicePdf: {
+                pdfBase64: 'dGVzdA=='
+              }
+            }
+          }
         }
       ];
 
@@ -61,10 +78,9 @@ describe('ThankYouPage', () => {
 
       fireEvent.mouseDown(screen.getByText('Pobierz fakturę w formacie PDF'));
 
-      expect(fetchFileOnLocalFileSystem).toHaveBeenCalledWith(
-        `users/0c1069c7-8e77-4749-bc4b-e308c6679d1c/invoices/${orderId}.pdf`,
-        `Faktura za zamówienie: ${orderId}`
-      );
+      await waitFor(() => {
+        expect(saveFileFromBase64).toHaveBeenCalledWith('dGVzdA==', `Faktura za zamówienie: ${orderId}.pdf`);
+      });
     });
   });
 
