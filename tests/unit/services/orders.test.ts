@@ -45,18 +45,10 @@ describe('generateAddOrderPayload', () => {
           email: 'siwiec.michal724@gmail.com',
           phoneNumber: '724131140'
         },
-        delivery: {
-          inPost: false,
-          dpd: true,
-          pickUpAtThePoint: false
-        },
+        deliveryMethod: 'dpd',
         payment: {
-          cashPayment: true,
-          traditionalTransfer: false
-        },
-        orderID: null,
-        totalPrice: null,
-        paymentMethod: null
+          stripePayment: true
+        }
       }),
       user: withPersist({
         loggedUserId: '2e785e4-93d5-42f4-aea1-8196b26a4f49',
