@@ -10,7 +10,7 @@ describe('ErrorModal', () => {
       <ErrorModal
         isOpen
         handleOnClose={mockClose}
-        info="Something went wrong"
+        body={<p>Something went wrong</p>}
         {...props}
       />
     );
@@ -35,7 +35,7 @@ describe('ErrorModal', () => {
   it('calls handleOnClose when modal backdrop is clicked or escape pressed', () => {
     setup();
 
-    const modalBackdrop = screen.getByRole('presentation'); // MUI modal root
+    const modalBackdrop = screen.getByRole('presentation');
     fireEvent.keyDown(modalBackdrop, { key: 'Escape', code: 'Escape' });
     fireEvent.click(modalBackdrop);
 
