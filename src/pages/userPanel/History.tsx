@@ -4,8 +4,9 @@ import { RootState } from 'types/store';
 import { useLazyQuery } from '@apollo/client';
 import { GetOrdersResponse, Order } from 'types/orders';
 import { GET_ORDERS } from 'graphql/queries/order';
+import { GET_INVOICE_PDF } from 'graphql/queries/invoice';
 import { formatTimestamp } from 'utils/helpers';
-import { saveFileFromS3 } from 'services/downloadFile';
+import { saveFileFromBase64 } from 'services/downloadFile';
 import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import Pagination from 'components/Pagination';
@@ -18,10 +19,15 @@ const History = () => {
   const [cursors, setCursors] = useState<(string | null)[]>([]);
   const [ordersResponse, setOrdersResponse] = useState<GetOrdersResponse['orders'] | null>(null);
   const [fetchingOrdersError, setFetchingOrdersError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [fetchingInvoiceError, setFetchingInvoiceError] = useState(false);
+  const [fetchingOrdersHistory, setFetchingOrdersHistory] = useState(true);
 
   const [fetchOrders] = useLazyQuery<GetOrdersResponse>(GET_ORDERS, {
     onError: () => setFetchingOrdersError(true)
+  });
+
+  const [fetchInvoice, { loading: fetchingInvoice }] = useLazyQuery(GET_INVOICE_PDF, {
+    fetchPolicy: 'network-only',
   });
 
   const processFetchingOrders = async () => {
@@ -34,29 +40,34 @@ const History = () => {
       const result = await fetchOrders({ variables: { first: quantityPerPage, after, userId: loggedUserId }, fetchPolicy: 'network-only' });
 
       if (result.error) {
-        setIsLoading(false);
+        setFetchingOrdersHistory(false);
         return;
       }
 
-      newCursors[page] = result.data.orders.pageInfo.endCursor;
-      if (page === activePage) setOrdersResponse(result.data.orders);
+      newCursors[page] = result.data!.orders.pageInfo.endCursor;
+      if (page === activePage) setOrdersResponse(result.data!.orders);
     }
 
     setCursors(newCursors);
-    setIsLoading(false);
+    setFetchingOrdersHistory(false);
   };
 
   const handlePaginationOnChange = (pageNumber: number) => setActivePage(pageNumber - 1);
 
   const downloadInvoice = (orderID: string) => {
-    const key = `users/${loggedUserId}/invoices/${orderID}.pdf`;
-    const fileName = `Faktura za zamówienie: ${orderID}`;
+    if (fetchingInvoice) return;
 
-    saveFileFromS3(key, fileName);
+    fetchInvoice({
+      variables: { orderId: orderID },
+      onCompleted: (response) => {
+        saveFileFromBase64(response.invoicePdf.pdfBase64, `Faktura za zamówienie: ${orderID}.pdf`);
+      },
+      onError: () => setFetchingInvoiceError(true),
+    });
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    setFetchingOrdersHistory(true);
     processFetchingOrders();
   }, [activePage, loggedUserId]);
 
@@ -101,13 +112,22 @@ const History = () => {
               quantityPerPage={quantityPerPage}
             />
         <LoadingModal
-          isOpen={isLoading}
+          isOpen={fetchingOrdersHistory}
           info="Trwa pobieranie historii twoich zamówień"
+        />
+        <LoadingModal
+          isOpen={fetchingInvoice}
+          info="Pobieranie faktury…"
         />
         <ErrorModal
           isOpen={fetchingOrdersError}
           handleOnClose={() => setFetchingOrdersError(false)}
           body={<p>Niestety nie udało się pobrać historii twoich zamówień.</p>}
+        />
+        <ErrorModal
+          isOpen={fetchingInvoiceError}
+          handleOnClose={() => setFetchingInvoiceError(false)}
+          body={<p>Nie udało się pobrać faktury</p>}
         />
     </div>
   );
