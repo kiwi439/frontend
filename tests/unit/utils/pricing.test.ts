@@ -1,5 +1,17 @@
 import { Products } from 'types/product';
-import { calculateProductsTotalPrice, formatPrice } from 'utils/pricing';
+import { calculateGrossPrice, calculateProductsTotalPrice, formatPrice } from 'utils/pricing';
+
+describe('calculateGrossPrice', () => {
+  test('should return net price when vat rate is 0', () => {
+    expect(calculateGrossPrice(23.99, 0)).toBe(23.99);
+  });
+
+  test('should return gross price with 23% vat', () => {
+    expect(calculateGrossPrice(10.99, 23)).toBe(13.52);
+    expect(calculateGrossPrice(124.99, 23)).toBe(153.74);
+    expect(calculateGrossPrice(599.99, 23)).toBe(737.99);
+  });
+});
 
 describe('calculateProductsTotalPrice', () => {
   test('should return 0 for empty products', () => {
@@ -20,13 +32,13 @@ describe('calculateProductsTotalPrice', () => {
           pictureBucket: 'budoman-development',
           pictureKey: 'images/products/foundation_materials/powłoka_przeciwwilgociowa.jpeg',
           price: 23.99,
-          vatRate: 0,
+          vatRate: 23,
           __typename: 'ProductObject'
         }
       }
     ];
 
-    expect(calculateProductsTotalPrice(products)).toBe(287.88);
+    expect(calculateProductsTotalPrice(products)).toBe(354.12);
   });
 });
 
