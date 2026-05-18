@@ -30,7 +30,7 @@ describe('Basket', () => {
 
     renderWithProviders(<Basket />, { preloadedState });
 
-    expect(screen.getByText(/461,22/)).toBeInTheDocument();
+    expect(screen.getByText('461,22 zł')).toBeInTheDocument();
     expect(screen.getByTestId('basket-icon')).toBeInTheDocument();
     expect(screen.queryByText('Twój koszyk jest pusty!')).not.toBeInTheDocument();
     expect(screen.queryByText('Twój koszyk')).not.toBeInTheDocument();

@@ -13,6 +13,7 @@ const Basket = () => {
   const [isEmptyBasketModalOpen, setIsEmptyBasketModalOpen] = useState(false);
   const blockName = 'top-bar-elements';
   const isBasketEmpty = isEmpty(productsInBasket);
+  const productsTotalPrice = calculateProductsTotalPrice(productsInBasket);
 
   const openEmptyBasketModal = () => setIsEmptyBasketModalOpen(true);
   const closeEmptyBasketModal = () => setIsEmptyBasketModalOpen(false);
@@ -23,7 +24,7 @@ const Basket = () => {
   return (
     <div className={`${blockName}__basket`}>
       <span className={`${blockName}__basket-price`}>
-        {formatPrice(calculateProductsTotalPrice(productsInBasket))} zł
+        {formatPrice(productsTotalPrice)} zł
       </span>
       <ShoppingBasketIcon
         className={`${blockName}__basket-icon`}
