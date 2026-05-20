@@ -22,7 +22,6 @@ const ORDER_EXAMPLE_STATE = {
     stripePayment: true
   },
   orderID: 'da97aa73-f0e4-4a17-9157-9f17454c73f3',
-  paymentMethod: 'stripe_payment',
   totalPrice: 199.99
 }
 

@@ -157,7 +157,7 @@ const Newsletter = () => {
       <ErrorModal
         isOpen={subscribingToNewsletterError}
         handleOnClose={handleErrorModalOnClose}
-        info="Niestety nie udało się zapisać na newsletter!"
+        body={<p>Niestety nie udało się zapisać na newsletter!</p>}
       />
     </div>
   );

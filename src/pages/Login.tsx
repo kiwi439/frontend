@@ -117,7 +117,7 @@ const Login = () => {
       <ErrorModal
         isOpen={loginFail}
         handleOnClose={handleModalClose}
-        info={loginFailMessage}
+        body={<p>{loginFailMessage}</p>}
       />
     </div>
   );

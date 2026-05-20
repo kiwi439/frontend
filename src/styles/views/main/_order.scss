@@ -46,27 +46,50 @@
     &__row {
       display: flex;
       width: 100%;
+
+      &--pay-total {
+        font-weight: bold;
+        font-size: 1.05rem;
+      }
     }
 
     &__col {
       @include flex-container($justify-content: flex-start);
-      flex-basis: 33.333%;
-      padding: 5px;
+      flex: 1 1 18%;
+      padding: 10px 12px;
       border-right: 1px solid $light-gray;
       border-bottom: 1px solid $light-gray;
+
+      &--name {
+        flex: 3 1 42%;
+        min-width: 12rem;
+        white-space: nowrap;
+      }
+
+      &--net-price,
+      &--vat,
+      &--quantity {
+        justify-content: center;
+        text-align: center;
+      }
 
       &:last-child {
         border-right: none;
       }
 
       &--sum-label {
-        flex-basis: 66.6%;
+        flex-basis: 25%;
         font-weight: bold;
       }
 
       &--price {
-        flex-basis: 33.3%;
+        flex-basis: 25%;
         font-weight: bold;
+      }
+
+      &--sum-qty {
+        @include flex-container($justify-content: center);
+        color: $light-gray;
       }
 
       &--thead {
@@ -74,10 +97,22 @@
         text-align: center;
         font-weight: bold;
       }
+
+      &--pay-total-cell {
+        @include flex-container($justify-content: flex-start, $align-items: baseline);
+        flex-basis: 100%;
+        flex-wrap: nowrap;
+        gap: .5rem;
+        border-bottom: none;
+      }
     }
 
-    &__tbody &__row:last-child &__col {
-      border-bottom: none;
+    &__pay-total-label {
+      white-space: nowrap;
+    }
+
+    &__pay-total-value {
+      white-space: nowrap;
     }
   }
 }

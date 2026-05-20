@@ -1,38 +1,6 @@
-import { Products } from 'types/product';
-import { countTotalPrice, formatPhoneNumber, cutAfterNChars, formatPrice, isTextLonger, formatTimestamp, validateByRegexp, areTheSame } from 'utils/helpers';
+import { formatPhoneNumber, cutAfterNChars, isTextLonger, formatTimestamp, validateByRegexp, areTheSame } from 'utils/helpers';
 
 import { EMAIL_REGEX } from 'data/regexps';
-
-describe('countTotalPrice', () => {
-  test('should return 0.0 for non products', () => {
-    const products: Products = [];
-    const total = countTotalPrice(products);
-
-    expect(total).toBe('0.00');
-  });
-
-  test('should return proper value for multiple products', () => {
-    const products: Products = [
-      {
-        id: '088035a3-5061-4ea2-8f43-1cb3f038cb82',
-        quantity: 12,
-        attributes: {
-          availableQuantity: 30,
-          id: '088035a3-5061-4ea2-8f43-1cb3f038cb82',
-          name: 'Powłoka przeciwwilgociowa',
-          pictureBucket: 'budoman-development',
-          pictureKey: 'images/products/foundation_materials/powłoka_przeciwwilgociowa.jpeg',
-          price: 23.99,
-          __typename: 'ProductObject'
-        }
-      }
-    ];
-
-    const total = countTotalPrice(products);
-
-    expect(total).toBe('287.88');
-  });
-});
 
 describe('formatPhoneNumber', () => {
   test('should make clear spaces inside phone number', () => {
@@ -65,14 +33,6 @@ describe('cutAfterNChars', () => {
     const result = cutAfterNChars('Test', 0);
 
     expect(result).toEqual({ narrowContent: '', restOfContent: 'Test' });
-  });
-});
-
-describe('formatPrice', () => {
-  test('should format price correctly', () => {
-    const formattedPrice = formatPrice(123.99);
-
-    expect(formattedPrice).toBe('123,99');
   });
 });
 

@@ -13,6 +13,7 @@ export const GET_PRODUCTS = gql`
           id
           name
           price
+          vatRate
           availableQuantity
           pictureKey
           pictureBucket

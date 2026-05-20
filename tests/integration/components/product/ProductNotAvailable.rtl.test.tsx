@@ -14,6 +14,7 @@ const product = {
   pictureBucket: 'budoman-development',
   pictureKey: 'images/products/foundation_materials/powłoka_przeciwwilgociowa.jpeg',
   price: 599.99,
+  vatRate: 23,
   availableQuantity: 0,
   __typename: 'ProductObject'
 };
@@ -24,7 +25,7 @@ describe('ProductNotAvailable', () => {
 
     expect(screen.getByRole('img', { name: 'Zdjęcie produktu' })).toHaveAttribute('src', 'https://example.com/mock-image.jpg');
     expect(screen.getByText(product.name)).toBeInTheDocument();
-    expect(screen.getByText('599,99 zł')).toBeInTheDocument();
+    expect(screen.getByText('737,99 zł')).toBeInTheDocument();
     expect(screen.getByText('Produkt niedostępny')).toBeInTheDocument();
     expect(screen.queryByText('Dodaj do koszyka')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Dodaj do koszyka' })).not.toBeInTheDocument();

@@ -84,7 +84,7 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
     <ErrorModal 
       isOpen={fetchingProductError} 
       handleOnClose={() => setFetchingProductError(false)} 
-      info="Nie udało się pobrać listy produktów" 
+      body={<p>Nie udało się pobrać listy produktów</p>}
     />
   );
 

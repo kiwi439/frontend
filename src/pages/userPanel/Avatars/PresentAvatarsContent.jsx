@@ -106,7 +106,7 @@ const PresentAvatarsContent = ({ avatars }) => {
       <ErrorModal
         isOpen={updatingAvatarError}
         handleOnClose={() => setUpdatingAvatarError(false)}
-        info="Niestety nie udało się zaktualizować avatarów."
+        body={<p>Niestety nie udało się zaktualizować avatarów.</p>}
       />
     </div>
   );

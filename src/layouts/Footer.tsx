@@ -7,7 +7,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import Tooltip from 'components/Tooltip';
 import useFetchUrl from 'hooks/useFetchUrl';
-import fetchFileOnLocalFileSystem from 'services/fetchFileOnLocalFileSystem';
+import { saveFileFromS3 } from 'services/downloadFile';
 import { formatPhoneNumber } from 'utils/helpers';
 import { FOOTER_MENU_ROUTING } from 'data/routing';
 import { SHOP_MAIL, SHOP_PHONE } from 'data/uiElements';
@@ -46,7 +46,7 @@ const Footer = () => {
                 `${blockName}__content-element
                  ${blockName}__content-element--tooltip-label`
               }
-              onMouseDown={() => fetchFileOnLocalFileSystem('documents/polityka_prywatnosci.pdf', 'Polityka prywatności.pdf')}
+              onMouseDown={() => saveFileFromS3('documents/polityka_prywatnosci.pdf', 'Polityka prywatności.pdf')}
               role="link"
               tabIndex={0}
             >
@@ -72,7 +72,7 @@ const Footer = () => {
                 `${blockName}__content-element
                  ${blockName}__content-element--tooltip-label`
               }
-              onMouseDown={() => fetchFileOnLocalFileSystem('documents/regulamin_sklepu.pdf', 'Regulamin sklepu.pdf')}
+              onMouseDown={() => saveFileFromS3('documents/regulamin_sklepu.pdf', 'Regulamin sklepu.pdf')}
               role="link"
               tabIndex={0}
             >

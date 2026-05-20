@@ -43,7 +43,7 @@ describe('Products', () => {
             }
           }
         },
-        delay: 50
+        delay: 1000
       }
     ];
 

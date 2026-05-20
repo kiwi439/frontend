@@ -16,8 +16,8 @@ describe('DeliveryMethod', () => {
     expect(screen.getByTestId('dpd-checkbox')).toBeInTheDocument();
     expect(screen.getByTestId('pickup-at-the-point-checkbox')).toBeInTheDocument();
 
-    expect(screen.getByText('Inpost (10,99 zł)')).toBeInTheDocument();
-    expect(screen.getByText('DPD (15,99 zł)')).toBeInTheDocument();
+    expect(screen.getByText('Inpost (13,52 zł)')).toBeInTheDocument();
+    expect(screen.getByText('DPD (19,67 zł)')).toBeInTheDocument();
     expect(screen.getByText('Odbiór w punkcie (0,00 zł)')).toBeInTheDocument();
 
     expect(screen.getByText('Dalej')).toBeInTheDocument();

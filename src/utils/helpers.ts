@@ -1,13 +1,3 @@
-import { Products } from 'types/product';
-
-export const countTotalPrice = (products: Products) => {
-  const initialValue = 0;
-
-  return products.reduce((prev, { quantity, attributes: { price } }) => (
-    (quantity * price) + prev
-  ), initialValue).toFixed(2);
-};
-
 export const formatPhoneNumber = (phoneNumber: string) => {
   const phoneNumberToArray = phoneNumber.split('');
   const initialValue = '';
@@ -36,7 +26,6 @@ export const scrollIntoElement = (elementSelector: string) => {
   }
 };
 
-export const formatPrice = (price: number) => price.toFixed(2).toString().replace('.', ',');
 export const isTextLonger = (text: string, charsQuantity: number) => text.length > charsQuantity;
 export const formatTimestamp = (timeStamp: string) => (
   new Date(timeStamp).toLocaleString('pl-PL', {
