@@ -76,7 +76,6 @@ describe('ClientDetails', () => {
           stripePayment: true
         },
         orderID: null,
-        paymentMethod: null,
         totalPrice: null
       }
     });
@@ -117,7 +116,6 @@ describe('ClientDetails', () => {
           stripePayment: true
         },
         orderID: null,
-        paymentMethod: null,
         totalPrice: null
       }
     });

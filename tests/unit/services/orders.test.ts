@@ -67,7 +67,6 @@ describe('generateAddOrderPayload', () => {
       email: 'siwiec.michal724@gmail.com',
       phoneNumber: '724131140',
       deliveryMethod: 'dpd',
-      paymentMethod: 'stripe_payment',
       userId: '2e785e4-93d5-42f4-aea1-8196b26a4f49',
       productsOrder: [
         { productId: '99297ff9-e0f9-4d71-b3d4-461ac09e3eec', productQuantity: 2 },
