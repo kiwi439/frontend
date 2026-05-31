@@ -12,6 +12,9 @@
   &__img-wrapper {
     flex-basis: 100%;
     padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     @media screen and (min-width: $md-breakpoint) {
       flex-basis: 35%;
@@ -21,7 +24,8 @@
   &__img {
     width: 100%;
     max-width: 150px;
-    height: auto;
+    height: 150px;
+    object-fit: contain;
   }
 
   &__info-wrapper {
