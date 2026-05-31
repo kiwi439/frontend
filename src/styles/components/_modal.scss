@@ -37,10 +37,11 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
-  }
 
-  &__button {
-    flex-basis: 100%;
+    .button {
+      flex-basis: 100%;
+      @include flex-container;
+    }
   }
 
   // Come back to topic, how to use & in such situaltion
