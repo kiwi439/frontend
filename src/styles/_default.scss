@@ -12,7 +12,7 @@ body {
   font-weight: $default-font-weight;
   line-height: $default-line-height;
   margin-top: 80px;
-  zoom: 0.77;
+  zoom: .77;
 
   @media screen and (min-width: $lg-breakpoint) {
     margin-top: 130px;
@@ -31,5 +31,5 @@ a {
 #wrapper {
   max-width: $max-page-width;
   margin: 0 auto;
-  box-shadow: $default-box-shadow
+  box-shadow: $default-box-shadow;
 }

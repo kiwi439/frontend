@@ -40,6 +40,7 @@
 
     .button {
       flex-basis: 100%;
+
       @include flex-container;
     }
   }
