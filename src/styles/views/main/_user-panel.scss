@@ -224,6 +224,8 @@
 
   .remove-account {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 
     &__header {
       flex-basis: 100%;
@@ -232,8 +234,37 @@
       color: $gray;
     }
 
+    &__content {
+      @include flex-container;
+      flex-wrap: wrap;
+      flex-basis: 100%;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 5px;
+
+      @media screen and (min-width: $md-breakpoint) {
+        width: 90%;
+        max-width: 520px;
+      }
+    }
+
     &__consequences-text {
-      margin: 5px 10px 30px;
+      flex-basis: 100%;
+      text-align: center;
+      margin: 0 0 30px;
+    }
+
+    .button--change-password {
+      flex-basis: 100%;
+      margin: 5px;
+      box-sizing: border-box;
+
+      @media screen and (min-width: $md-breakpoint) {
+        flex-basis: auto;
+        align-self: center;
+        width: 100%;
+        max-width: 450px;
+      }
     }
   }
 
