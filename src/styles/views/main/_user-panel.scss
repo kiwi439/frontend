@@ -90,6 +90,10 @@
       border-bottom: 1px solid $light-gray;
       padding: 5px;
 
+      @media screen and (max-width: $md-breakpoint) {
+        text-align: center;
+      }
+
       &:last-child {
         border-right: none;
       }
