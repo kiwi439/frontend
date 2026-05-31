@@ -90,6 +90,10 @@
       border-bottom: 1px solid $light-gray;
       padding: 5px;
 
+      @media screen and (max-width: $md-breakpoint) {
+        text-align: center;
+      }
+
       &:last-child {
         border-right: none;
       }
@@ -138,14 +142,18 @@
       flex-wrap: wrap;
       flex-basis: 100%;
       margin: 0 auto;
+
+      @media screen and (min-width: $md-breakpoint) {
+        max-width: 800px;
+      }
     }
 
     .input__error {
       flex-basis: 100%;
       padding: 0 10px;
 
-      @media screen and (min-width: $xs-breakpoint) {
-        flex-basis: 60%;
+      @media screen and (min-width: $md-breakpoint) {
+        flex-basis: 80%;
         padding: 0;
       }
     }
@@ -153,6 +161,8 @@
 
   .my-details {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 
     &__header {
       flex-basis: 100%;
@@ -164,14 +174,30 @@
     &__input-wrapper {
       @include flex-container;
       flex-wrap: wrap;
+      flex-basis: 100%;
+      margin: 0 auto;
+
+      @media screen and (min-width: $md-breakpoint) {
+        max-width: 800px;
+      }
     }
 
     &__input {
       flex-basis: 100%;
       margin: 5px;
 
-      @media screen and (min-width: $xs-breakpoint) {
+      @media screen and (min-width: $md-breakpoint) {
         flex-basis: 80%;
+      }
+    }
+
+    .input__error {
+      flex-basis: 100%;
+      padding: 0 10px;
+
+      @media screen and (min-width: $md-breakpoint) {
+        flex-basis: 80%;
+        padding: 0;
       }
     }
   }
@@ -216,6 +242,8 @@
 
   .remove-account {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 
     &__header {
       flex-basis: 100%;
@@ -224,8 +252,34 @@
       color: $gray;
     }
 
+    &__content {
+      @include flex-container;
+      flex-wrap: wrap;
+      flex-basis: 100%;
+      margin: 0 auto;
+
+      @media screen and (min-width: $md-breakpoint) {
+        max-width: 800px;
+      }
+    }
+
     &__consequences-text {
-      margin: 5px 10px 30px;
+      flex-basis: 100%;
+      text-align: center;
+      margin: 0 5px 30px;
+
+      @media screen and (min-width: $md-breakpoint) {
+        flex-basis: 80%;
+      }
+    }
+
+    .button--change-password {
+      flex-basis: 100%;
+      margin: 5px;
+
+      @media screen and (min-width: $md-breakpoint) {
+        flex-basis: 80%;
+      }
     }
   }
 

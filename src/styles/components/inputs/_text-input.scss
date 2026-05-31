@@ -2,7 +2,11 @@
 
 .text-input {
   &--newsletter {
-    flex-basis: 80%;
+    flex-basis: 100%;
+
+    @media screen and (min-width: $md-breakpoint) {
+      flex-basis: 80%;
+    }
   }
 
   &--login {
@@ -24,8 +28,8 @@
   &--change-password {
     flex-basis: 100%;
 
-    @media screen and (min-width: $xs-breakpoint) {
-      flex-basis: 60%;
+    @media screen and (min-width: $md-breakpoint) {
+      flex-basis: 80%;
     }
   }
 }

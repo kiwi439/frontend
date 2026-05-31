@@ -1,4 +1,12 @@
 .newsletter {
-  padding: $sections-default-padding;
+  padding-block: 50px;
+  padding-inline: 15px;
   background-color: #e6e8ec;
+
+  .form-container__wrapper {
+    @media screen and (min-width: $md-breakpoint) {
+      width: 100%;
+      max-width: 800px;
+    }
+  }
 }

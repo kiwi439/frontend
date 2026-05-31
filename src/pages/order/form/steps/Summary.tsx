@@ -37,7 +37,7 @@ const Summary = () => {
   });
 
   return (
-    <div className={blockName}>
+    <div className={`order__form-part-container ${blockName}`}>
       <table className={`${blockName}__table`}>
         <thead className={`${blockName}__thead`}>
           <tr className={`${blockName}__row`}>
@@ -57,28 +57,28 @@ const Summary = () => {
               return (
                 <tr className={`${blockName}__row`} key={uuidv4()}>
                   <td className={`${blockName}__col ${blockName}__col--name`}>{name}</td>
-                  <td className={`${blockName}__col ${blockName}__col--net-price`}>{formatPrice(unitProductNettoPrice)} zł</td>
-                  <td className={`${blockName}__col ${blockName}__col--vat`}>{formatPrice(unitProductVatAmount)} zł</td>
-                  <td className={`${blockName}__col ${blockName}__col--quantity`}>{quantity}</td>
+                  <td className={`${blockName}__col ${blockName}__col--net-price`} data-label="Cena netto">{formatPrice(unitProductNettoPrice)}&nbsp;zł</td>
+                  <td className={`${blockName}__col ${blockName}__col--vat`} data-label="VAT">{formatPrice(unitProductVatAmount)}&nbsp;zł</td>
+                  <td className={`${blockName}__col ${blockName}__col--quantity`} data-label="Ilość">{quantity}</td>
                 </tr>
               );
             })
           }
           <tr className={`${blockName}__row`}>
             <td className={`${blockName}__col ${blockName}__col--name`}>{`Dostawa: ${selectedDelivery.label}`}</td>
-            <td className={`${blockName}__col ${blockName}__col--net-price`}>
-              {formatPrice(selectedDelivery.price)} zł
+            <td className={`${blockName}__col ${blockName}__col--net-price`} data-label="Cena netto">
+              {formatPrice(selectedDelivery.price)}&nbsp;zł
             </td>
-            <td className={`${blockName}__col ${blockName}__col--vat`}>
-              {formatPrice(calculateDeliveryVatAmount())} zł
+            <td className={`${blockName}__col ${blockName}__col--vat`} data-label="VAT">
+              {formatPrice(calculateDeliveryVatAmount())}&nbsp;zł
             </td>
-            <td className={`${blockName}__col ${blockName}__col--quantity`}>1</td>
+            <td className={`${blockName}__col ${blockName}__col--quantity`} data-label="Ilość">1</td>
           </tr>
           <tr className={`${blockName}__row ${blockName}__row--pay-total`}>
             <td className={`${blockName}__col ${blockName}__col--pay-total-cell`}>
               <span className={`${blockName}__pay-total-label`}>Razem do zapłaty:</span>
               <span className={`${blockName}__pay-total-value`}>
-                {formatPrice(calculateOrderTotalPrice(addedProducts, selectedDelivery))} zł
+                {formatPrice(calculateOrderTotalPrice(addedProducts, selectedDelivery))}&nbsp;zł
               </span>
             </td>
           </tr>

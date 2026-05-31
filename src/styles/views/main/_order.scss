@@ -1,4 +1,36 @@
 .order {
+  padding-inline: 15px;
+  box-sizing: border-box;
+
+  .form-container__wrapper {
+    @media screen and (min-width: $md-breakpoint) {
+      width: 100%;
+      max-width: 800px;
+    }
+  }
+
+  .stepper {
+    width: 100%;
+
+    @media screen and (min-width: $md-breakpoint) {
+      width: 80%;
+    }
+  }
+
+  .text-input--personal-details,
+  .checkbox__wrapper,
+  .button--client-details,
+  .button--order,
+  .summary__table,
+  .input__error {
+    flex-basis: 100%;
+    box-sizing: border-box;
+
+    @media screen and (min-width: $md-breakpoint) {
+      flex-basis: 80%;
+    }
+  }
+
   &__form-part-container {
     flex-basis: 100%;
     display: flex;
@@ -25,31 +57,59 @@
   }
 
   .summary {
-    width: 80%;
     min-height: 200px;
 
     &__table {
       display: flex;
       flex-direction: column;
-      box-sizing: border-box;
+      width: 100%;
       margin-bottom: 30px;
       border: 1px solid $light-gray;
       border-radius: $default-box-border-radious;
+
+      @media screen and (max-width: $md-breakpoint) {
+        display: block;
+      }
     }
 
     &__thead,
     &__tbody {
       display: flex;
       flex-direction: column;
+
+      @media screen and (max-width: $md-breakpoint) {
+        display: block;
+      }
+    }
+
+    &__thead {
+      @media screen and (max-width: $md-breakpoint) {
+        display: none;
+      }
     }
 
     &__row {
       display: flex;
       width: 100%;
 
+      @media screen and (max-width: $md-breakpoint) {
+        display: block;
+        min-width: 0;
+
+        &:not(&--pay-total) {
+          &:not(:last-child) {
+            border-bottom: 1px solid $light-gray;
+          }
+        }
+      }
+
       &--pay-total {
         font-weight: bold;
         font-size: 1.05rem;
+
+        @media screen and (max-width: $md-breakpoint) {
+          display: flex;
+        }
       }
     }
 
@@ -104,6 +164,57 @@
         flex-wrap: nowrap;
         gap: .5rem;
         border-bottom: none;
+      }
+
+      @media screen and (max-width: $md-breakpoint) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex: none;
+        width: 100%;
+        min-width: 0;
+        padding: 6px 10px;
+        border-right: none;
+        border-bottom: none;
+        white-space: normal;
+        text-align: right;
+
+        &::before {
+          content: attr(data-label);
+          font-weight: bold;
+          margin-right: 12px;
+          text-align: left;
+          flex-shrink: 0;
+        }
+
+        &--name {
+          justify-content: flex-start;
+          font-weight: bold;
+          padding-bottom: 8px;
+          margin-bottom: 4px;
+          border-bottom: 1px solid $light-gray;
+          text-align: left;
+
+          &::before {
+            content: none;
+          }
+        }
+
+        &--net-price,
+        &--vat,
+        &--quantity {
+          justify-content: space-between;
+        }
+
+        &--pay-total-cell {
+          justify-content: space-between;
+          padding: 12px 10px;
+          border-bottom: none;
+
+          &::before {
+            content: none;
+          }
+        }
       }
     }
 

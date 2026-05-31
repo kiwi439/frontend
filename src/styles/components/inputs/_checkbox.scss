@@ -24,9 +24,11 @@
     display: flex;
     align-items: center;
     justify-items: center;
+    margin: $default-control-margin;
     margin-bottom: 10px;
     padding: 10px 12px;
     cursor: pointer;
+    box-sizing: border-box;
 
     border: 1px solid rgba($black, 18%);
     border-radius: $default-control-border-radious;

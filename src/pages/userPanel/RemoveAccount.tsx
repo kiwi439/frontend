@@ -30,15 +30,17 @@ const RemoveAccount = () => {
   return (
     <div className={blockName}>
       <h1 className={`${blockName}__header`}>Usuń konto</h1>
-      <p className={`${blockName}__consequences-text`}>
-        Usunięcie konta wiąże się z straceniem wszystkich informacji o zamówieniach,<br />
-        usunięciem dodanych opini oraz wypisaniu z newslettera.
-      </p>
-      <SubmitButton
-        value="Usuń konto!"
-        classNames="button--change-password"
-        onMouseDown={removeAccount}
-      />
+      <div className={`${blockName}__content`}>
+        <p className={`${blockName}__consequences-text`}>
+          Usunięcie konta wiąże się z straceniem wszystkich informacji o zamówieniach,
+          usunięciem dodanych opini oraz wypisaniu z newslettera.
+        </p>
+        <SubmitButton
+          value="Usuń konto!"
+          classNames="button--change-password"
+          onMouseDown={removeAccount}
+        />
+      </div>
       <LoadingModal
         isOpen={loading}
         info="Twoje konto jest usuwane!"
