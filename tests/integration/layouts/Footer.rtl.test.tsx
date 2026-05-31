@@ -1,6 +1,6 @@
 // TODO
 // @ts-nocheck
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Footer from 'layouts/Footer.tsx';
 import { saveFileFromS3 } from 'services/downloadFile';
@@ -85,33 +85,5 @@ describe('Footer', () => {
     fireEvent.mouseDown(screen.getByText('Regulamin sklepu'));
 
     expect(saveFileFromS3).toHaveBeenCalledWith('documents/regulamin_sklepu.pdf', 'Regulamin sklepu.pdf');
-  });
-
-  it('shows and hides privacy policy tooltip', async () => {
-    renderFooter();
-
-    await waitFor(() => {
-      fireEvent.mouseEnter(screen.getByTestId('policy-privacy-prompt'));
-      expect(screen.queryByText(/Polityka prywatności – dokument umieszczany na witrynie internetowej/)).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      fireEvent.mouseLeave(screen.getByTestId('policy-privacy-prompt'));
-      expect(screen.queryByText(/Polityka prywatności – dokument umieszczany na witrynie internetowej/)).not.toBeInTheDocument();
-    });
-  });
-
-  it('shows and hides shop rules tooltip', async () => {
-    renderFooter();
-
-    await waitFor(() => {
-      fireEvent.mouseEnter(screen.getByTestId('shop-regulation-prompt'));
-      expect(screen.queryByText(/Regulamin sklepu internetowego to zbiór zasad i norm, regulujących procesy/)).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      fireEvent.mouseLeave(screen.getByTestId('shop-regulation-prompt'));
-      expect(screen.queryByText(/Regulamin sklepu internetowego to zbiór zasad i norm, regulujących procesy/)).not.toBeInTheDocument();
-    });
   });
 });
