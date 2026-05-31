@@ -16,7 +16,11 @@
   }
 
   &--newsletter {
-    flex-basis: 80%;
+    flex-basis: 100%;
+
+    @media screen and (min-width: $md-breakpoint) {
+      flex-basis: 80%;
+    }
   }
 
   &--login {
