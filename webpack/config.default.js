@@ -51,9 +51,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'olx-front',
+      title: 'Budoman',
       filename: 'index.html',
-      template: './src/index.html'
+      template: './src/index.html',
+      favicon: path.resolve(__dirname, '../src/assets/favicon.png')
     }),
     new MiniCssExtractPlugin({
       filename: 'main-[contenthash:6].css'
