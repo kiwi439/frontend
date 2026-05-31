@@ -161,6 +161,8 @@
 
   .my-details {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 
     &__header {
       flex-basis: 100%;
@@ -172,14 +174,30 @@
     &__input-wrapper {
       @include flex-container;
       flex-wrap: wrap;
+      flex-basis: 100%;
+      margin: 0 auto;
+
+      @media screen and (min-width: $md-breakpoint) {
+        max-width: 800px;
+      }
     }
 
     &__input {
       flex-basis: 100%;
       margin: 5px;
 
-      @media screen and (min-width: $xs-breakpoint) {
+      @media screen and (min-width: $md-breakpoint) {
         flex-basis: 80%;
+      }
+    }
+
+    .input__error {
+      flex-basis: 100%;
+      padding: 0 10px;
+
+      @media screen and (min-width: $md-breakpoint) {
+        flex-basis: 80%;
+        padding: 0;
       }
     }
   }
