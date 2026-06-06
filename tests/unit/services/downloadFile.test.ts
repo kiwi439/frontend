@@ -28,53 +28,26 @@ describe('saveFileFromBase64', () => {
 });
 
 describe('saveFileFromS3', () => {
-  let getObjectSpy, saveAsSpy;
+  let getSignedUrlSpy, windowOpenSpy;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    Object.defineProperty(global.URL, 'createObjectURL', {
-      writable: true,
-      value: jest.fn(() => 'mock-blob-url')
-    });
-
-    getObjectSpy = jest.spyOn(S3Service, 'getObject');
-    saveAsSpy = jest.spyOn(FileSaver, 'saveAs');
+    getSignedUrlSpy = jest.spyOn(S3Service, 'getSignedUrl').mockReturnValue('https://signed-url.example/file.pdf');
+    windowOpenSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
   });
 
-  describe('success path', () => {
-    beforeEach(() => {
-      getObjectSpy.mockImplementation((_key, _bucket, responseHandler) => {
-        const binaryData = Buffer.from('binary-fake-data', 'utf8');
-        responseHandler(null, { Body: binaryData });
-      });
-    });
+  it('opens signed S3 url in new tab', () => {
+    saveFileFromS3('testKey', 'Polityka prywatnosci.pdf');
 
-    it('saves file from S3 as pdf file', () => {
-      saveFileFromS3('testKey', 'Polityka prywatnosci.pdf');
-      const blob = saveAsSpy.mock.calls[0][0];
-  
-      expect(getObjectSpy).toHaveBeenCalledTimes(1);
-      expect(getObjectSpy).toHaveBeenCalledWith('testKey', 'budoman-development', expect.any(Function));
-      expect(saveAsSpy).toHaveBeenCalledTimes(1);
-      expect(saveAsSpy).toHaveBeenCalledWith(blob, 'Polityka prywatnosci.pdf');
-      expect(blob).toBeInstanceOf(Blob);
-    });
+    expect(getSignedUrlSpy).toHaveBeenCalledTimes(1);
+    expect(getSignedUrlSpy).toHaveBeenCalledWith('testKey', 'budoman-development');
+    expect(windowOpenSpy).toHaveBeenCalledWith('https://signed-url.example/file.pdf', '_blank', 'noopener,noreferrer');
   });
 
-  describe('failure path', () => {
-    beforeEach(() => {
-      getObjectSpy.mockImplementation((key, bucket, responseHandler) => {
-        responseHandler(new Error('Some S3 error'), null);
-      });
-    });
+  it('uses custom bucket when provided', () => {
+    saveFileFromS3('testKey', 'Polityka prywatnosci.pdf', 'testBucket');
 
-    it('does not save file from S3 if cannot fetch file from storage', () => {
-      saveFileFromS3('testKey', 'Polityka prywatnosci.pdf', 'testBucket');
-  
-      expect(getObjectSpy).toHaveBeenCalledTimes(1);
-      expect(getObjectSpy).toHaveBeenCalledWith('testKey', 'testBucket', expect.any(Function));
-      expect(saveAsSpy).toHaveBeenCalledTimes(0);
-    });
+    expect(getSignedUrlSpy).toHaveBeenCalledWith('testKey', 'testBucket');
   });
 });
