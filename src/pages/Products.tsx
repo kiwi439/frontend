@@ -114,7 +114,7 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
 
   useEffect(() => {
     if (!loading) scrollToTop();
-  }, [loading, productType]);
+  }, [loading, productType, arePromoted]);
 
   useEffect(() => {
     setActivePage(0);
