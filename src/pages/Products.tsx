@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { Categories } from 'types/category';
 import { GetProductsResponse } from 'types/product';
@@ -16,7 +16,6 @@ const QUANTITY_PER_PAGE = 5;
 
 const Products = ({ arePromoted = false }: ProductsProps) => {
   const [searchParams] = useSearchParams();
-  const location = useLocation();
   const productType = searchParams.get('type') as Categories | null;
   const [activePage, setActivePage] = useState(0);
   const [cursors, setCursors] = useState<Map<number, string | null>>(new Map([[0, null]]));
@@ -114,8 +113,8 @@ const Products = ({ arePromoted = false }: ProductsProps) => {
   };
 
   useEffect(() => {
-    scrollToTop();
-  }, [location.key]);
+    if (!loading) scrollToTop();
+  }, [loading, productType]);
 
   useEffect(() => {
     setActivePage(0);
