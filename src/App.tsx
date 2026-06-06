@@ -12,8 +12,10 @@ const App = () => {
   return (
     <Fragment>
       <TopBar />
-      <AppRouter />
-      <Newsletter />
+      <div className="app-main-container">
+        <AppRouter />
+        <Newsletter />
+      </div>
       <Footer />
     </Fragment>
   );

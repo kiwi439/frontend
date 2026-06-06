@@ -18,5 +18,6 @@ describe('DesktopContent', () => {
     expect(screen.queryByText('Rejestracja')).toBeInTheDocument();
     expect(screen.queryByText('Produkty')).toBeInTheDocument();
     expect(screen.queryByText('Opinie')).toBeInTheDocument();
+    expect(screen.getByText(/Wersja testowa/)).toBeInTheDocument();
   });
 });

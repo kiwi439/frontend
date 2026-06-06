@@ -11,11 +11,11 @@ body {
   color: $default-font-color;
   font-weight: $default-font-weight;
   line-height: $default-line-height;
-  margin-top: 80px;
+  margin-top: calc(80px / .77);
   zoom: .77;
 
   @media screen and (min-width: $lg-breakpoint) {
-    margin-top: 130px;
+    margin-top: calc(130px / .77);
   }
 }
 
@@ -29,7 +29,18 @@ a {
 }
 
 #wrapper {
+  display: flex;
+  flex-direction: column;
   max-width: $max-page-width;
+  min-height: calc((100vh - 80px) / .77);
   margin: 0 auto;
   box-shadow: $default-box-shadow;
+
+  @media screen and (min-width: $lg-breakpoint) {
+    min-height: calc((100vh - 130px) / .77);
+  }
+}
+
+.app-main-container {
+  flex: 1 0 auto;
 }

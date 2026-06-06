@@ -5,6 +5,7 @@ import Drawer from 'components/Drawer';
 import Authorization from './elements/Authorization';
 import MenuList from './elements/MenuList';
 import Basket from './elements/basket/Basket';
+import DemoNotice from './elements/DemoNotice';
 
 const MobileContent = () => {
   const blockName = 'top-bar-elements';
@@ -12,9 +13,10 @@ const MobileContent = () => {
 
   return (
     <Fragment>
-      <div className={blockName}>
+      <div className={`${blockName} ${blockName}--mobile`}>
         <Logo />
         <HamburgerMenu handleOnMouseDown={() => setIsDrawerOpen(true)} />
+        <DemoNotice />
       </div>
       <Drawer
         isOpen={isDrawerOpen}
