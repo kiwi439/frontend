@@ -14,6 +14,7 @@ describe('MobileContent', () => {
   it('renders topBar in mobile mood correctly', () => {
     expect(screen.getByAltText('Budoman logo')).toBeInTheDocument();
     expect(screen.getByTestId('MenuIcon')).toBeInTheDocument();
+    expect(screen.getByText(/Wersja testowa/)).toBeInTheDocument();
     expect(screen.queryByText('Logowanie')).not.toBeInTheDocument();
     expect(screen.queryByText('Rejestracja')).not.toBeInTheDocument();
     expect(screen.queryByText('Produkty')).not.toBeInTheDocument();
