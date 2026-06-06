@@ -9,7 +9,7 @@ export const saveFileFromBase64 = (base64: string, fileName: string, mimeType = 
   FileSaver.saveAs(blob, fileName);
 };
 
-export const saveFileFromS3 = (key: string, _fileName: string, bucket: string = AWS_BUCKET) => {
-  const url = getSignedUrl(key, bucket);
+export const saveFileFromS3 = (key: string, fileName: string, bucket: string = AWS_BUCKET) => {
+  const url = getSignedUrl(key, bucket, fileName);
   window.open(url, '_blank', 'noopener,noreferrer');
 };

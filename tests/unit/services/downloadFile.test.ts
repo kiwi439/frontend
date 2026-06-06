@@ -41,13 +41,13 @@ describe('saveFileFromS3', () => {
     saveFileFromS3('testKey', 'Polityka prywatnosci.pdf');
 
     expect(getSignedUrlSpy).toHaveBeenCalledTimes(1);
-    expect(getSignedUrlSpy).toHaveBeenCalledWith('testKey', 'budoman-development');
+    expect(getSignedUrlSpy).toHaveBeenCalledWith('testKey', 'budoman-development', 'Polityka prywatnosci.pdf');
     expect(windowOpenSpy).toHaveBeenCalledWith('https://signed-url.example/file.pdf', '_blank', 'noopener,noreferrer');
   });
 
   it('uses custom bucket when provided', () => {
     saveFileFromS3('testKey', 'Polityka prywatnosci.pdf', 'testBucket');
 
-    expect(getSignedUrlSpy).toHaveBeenCalledWith('testKey', 'testBucket');
+    expect(getSignedUrlSpy).toHaveBeenCalledWith('testKey', 'testBucket', 'Polityka prywatnosci.pdf');
   });
 });

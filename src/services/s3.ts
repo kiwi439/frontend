@@ -8,7 +8,15 @@ const s3 = new S3({
   region: AWS_REGION
 });
 
-export const getSignedUrl = (key: string, bucket: string = AWS_BUCKET) => s3.getSignedUrl('getObject', { Bucket: bucket, Key: key });
+export const getSignedUrl = (key: string, bucket: string = AWS_BUCKET, fileName?: string) => {
+  const params: S3.Types.GetObjectRequest = { Bucket: bucket, Key: key };
+
+  if (fileName) {
+    params.ResponseContentDisposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+  }
+
+  return s3.getSignedUrl('getObject', params);
+};
 
 export const getObject = async (
   key: string,
