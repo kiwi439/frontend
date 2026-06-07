@@ -69,6 +69,14 @@
       color: $gray;
     }
 
+    &__table-wrapper {
+      width: 100%;
+
+      @media screen and (max-width: $xs-breakpoint) {
+        display: none;
+      }
+    }
+
     &__table {
       width: 100%;
       margin: 0 auto;
@@ -90,7 +98,7 @@
       border-bottom: 1px solid $light-gray;
       padding: 5px;
 
-      @media screen and (max-width: $md-breakpoint) {
+        @media screen and (max-width: $md-breakpoint) {
         text-align: center;
       }
 
@@ -103,24 +111,104 @@
       }
 
       &:nth-of-type(2) {
-        flex-basis: 30%;
+        flex-basis: 25%;
       }
 
       &:nth-of-type(3) {
-        flex-basis: 35%;
+        flex-basis: 20%;
+      }
+
+      &:nth-of-type(4) {
+        flex-basis: 20%;
       }
 
       &--thead {
         font-weight: bold;
       }
 
-      &--invoice-download {
+      &--status-ok {
+        color: $green;
+        font-weight: 600;
+      }
+
+      &--status-error {
+        color: $red;
+        font-weight: 600;
+      }
+
+      &--order-id {
+        cursor: pointer;
         transition: color $default-hover-animation-time;
 
         &:hover {
-          cursor: pointer;
           color: $gray;
         }
+      }
+    }
+
+    &__orders-list {
+      display: none;
+
+      @media screen and (max-width: $xs-breakpoint) {
+        display: block;
+      }
+    }
+
+    &__order-tile {
+      border: 1px solid $light-gray;
+      border-radius: $default-box-border-radious;
+      background-color: $white;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &__order-field {
+      padding: 8px 0;
+      border-bottom: 1px solid $light-gray;
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
+    }
+
+    &__order-label {
+      display: block;
+      font-weight: bold;
+      color: $gray;
+      margin-bottom: 4px;
+    }
+
+    &__order-value {
+      display: block;
+      word-break: break-word;
+
+      &--order-id {
+        cursor: pointer;
+        word-break: break-all;
+        transition: color $default-hover-animation-time;
+
+        &:hover {
+          color: $gray;
+        }
+      }
+
+      &--status-ok {
+        color: $green;
+        font-weight: 600;
+      }
+
+      &--status-error {
+        color: $red;
+        font-weight: 600;
       }
     }
   }

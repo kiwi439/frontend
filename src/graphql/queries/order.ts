@@ -24,6 +24,7 @@ export const GET_ORDERS = gql`
           id
           totalPrice
           createdAt
+          paid
         }
       }
       pageInfo {
