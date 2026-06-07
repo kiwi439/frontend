@@ -11,7 +11,7 @@ body {
   color: $default-font-color;
   font-weight: $default-font-weight;
   line-height: $default-line-height;
-  margin-top: calc(80px / .77);
+  margin-top: calc(150px / .77);
   zoom: .77;
 
   @media screen and (min-width: $lg-breakpoint) {
@@ -32,7 +32,7 @@ a {
   display: flex;
   flex-direction: column;
   max-width: $max-page-width;
-  min-height: calc((100vh - 80px) / .77);
+  min-height: calc((100vh - 150px) / .77);
   margin: 0 auto;
   box-shadow: $default-box-shadow;
 
