@@ -4,6 +4,7 @@ export type Order = DeepReadonly<{
   id: string,
   totalPrice: number,
   createdAt: string,
+  paid: boolean,
   __typename: string
 }>;
 

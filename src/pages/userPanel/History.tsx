@@ -54,13 +54,13 @@ const History = () => {
 
   const handlePaginationOnChange = (pageNumber: number) => setActivePage(pageNumber - 1);
 
-  const downloadInvoice = (orderID: string) => {
+  const downloadInvoice = (orderId: string) => {
     if (fetchingInvoice) return;
 
     fetchInvoice({
-      variables: { orderId: orderID },
+      variables: { orderId },
       onCompleted: (response) => {
-        saveFileFromBase64(response.invoicePdf.pdfBase64, `Faktura za zamówienie: ${orderID}.pdf`);
+        saveFileFromBase64(response.invoicePdf.pdfBase64, `Faktura za zamówienie: ${orderId}.pdf`);
       },
       onError: () => setFetchingInvoiceError(true),
     });
@@ -77,34 +77,70 @@ const History = () => {
   return (
     <div className={blockName}>
         <h1 className={`${blockName}__header`}>Historia zamówień</h1>
-        <table className={`${blockName}__table`}>
+        <div className={`${blockName}__table-wrapper`}>
+          <table className={`${blockName}__table`}>
               <thead>
                 <tr className={`${blockName}__table-row`}>
                   <td className={`${blockName}__table-col ${blockName}__table-col--thead`}>
                     Numer zamówienia
                   </td>
+                  <td className={`${blockName}__table-col ${blockName}__table-col--thead`}>Status płatności</td>
                   <td className={`${blockName}__table-col ${blockName}__table-col--thead`}>Cena całkowita</td>
                   <td className={`${blockName}__table-col ${blockName}__table-col--thead`}>Data zakupu</td>
                 </tr>
               </thead>
               <tbody>
                 {
-                  orders.map(({ id, totalPrice, createdAt }) => (
-                    <tr key={id} className={`${blockName}__table-row`}>
+                  orders.map((order) => (
+                    <tr key={order.id} className={`${blockName}__table-row`}>
                       <td
-                        className={`${blockName}__table-col
-                                    ${blockName}__table-col--invoice-download`}
-                        onClick={() => downloadInvoice(id)}
+                        className={`${blockName}__table-col ${order.paid ? `${blockName}__table-col--order-id` : ''}`}
+                        onClick={order.paid ? () => downloadInvoice(order.id) : undefined}
                       >
-                        {id}
+                        {order.id}
                       </td>
-                      <td className={`${blockName}__table-col`}>{totalPrice} zł</td>
-                      <td className={`${blockName}__table-col`}>{formatTimestamp(createdAt)}</td>
+                      <td className={`${blockName}__table-col ${order.paid ? `${blockName}__table-col--status-ok` : `${blockName}__table-col--status-error`}`}>
+                        {order.paid ? 'Opłacono' : 'Nieopłacono'}
+                      </td>
+                      <td className={`${blockName}__table-col`}>{order.totalPrice} zł</td>
+                      <td className={`${blockName}__table-col`}>{formatTimestamp(order.createdAt)}</td>
                     </tr>
                   ))
                 }
               </tbody>
-            </table>
+          </table>
+        </div>
+        <div className={`${blockName}__orders-list`}>
+          {
+            orders.map((order) => (
+              <div key={order.id} className={`${blockName}__order-tile`}>
+                <div className={`${blockName}__order-field`}>
+                  <span className={`${blockName}__order-label`}>Numer zamówienia</span>
+                  <span
+                    className={`${blockName}__order-value ${order.paid ? `${blockName}__order-value--order-id` : ''}`}
+                    onClick={order.paid ? () => downloadInvoice(order.id) : undefined}
+                  >
+                    {order.id}
+                  </span>
+                </div>
+                <div className={`${blockName}__order-field`}>
+                  <span className={`${blockName}__order-label`}>Status płatności</span>
+                  <span className={`${blockName}__order-value ${order.paid ? `${blockName}__order-value--status-ok` : `${blockName}__order-value--status-error`}`}>
+                    {order.paid ? 'Opłacono' : 'Nieopłacono'}
+                  </span>
+                </div>
+                <div className={`${blockName}__order-field`}>
+                  <span className={`${blockName}__order-label`}>Cena całkowita</span>
+                  <span className={`${blockName}__order-value`}>{order.totalPrice} zł</span>
+                </div>
+                <div className={`${blockName}__order-field`}>
+                  <span className={`${blockName}__order-label`}>Data zakupu</span>
+                  <span className={`${blockName}__order-value`}>{formatTimestamp(order.createdAt)}</span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
             <Pagination
               activePage={activePage}
               onChange={handlePaginationOnChange}

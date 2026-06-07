@@ -1,13 +1,10 @@
 import React, { ReactElement, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'types/store';
 import { saveFileFromBase64 } from 'services/downloadFile';
 import SubmitButton from 'components/SubmitButton';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_ORDER } from 'graphql/queries/order';
 import { GET_INVOICE_PDF } from 'graphql/queries/invoice';
-import useRedirect from 'hooks/useRedirect';
 import LoadingModal from 'components/modals/LoadingModal';
 import ErrorModal from 'components/modals/ErrorModal';
 import FormContainer from 'components/containers/FormContainer';
@@ -26,9 +23,6 @@ const ThankYouPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const orderID = searchParams.get('order_id') as string;
-  const { loggedUserId } = useSelector((store: RootState) => store.user);
-
-  useRedirect({ path: '/', shouldRedirect: !loggedUserId });
 
   const { data, loading, error, startPolling, stopPolling } = useQuery(GET_ORDER, {
     variables: { id: orderID },
